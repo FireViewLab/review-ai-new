@@ -52,7 +52,7 @@ PRAISE_INTENSITIES = frozenset({"low", "medium", "extreme"})
 EVIDENCE_LEVELS = frozenset({"none", "limited", "sufficient"})
 HEALTH_KEYWORDS = (
     "비타민", "영양제", "유산균", "오메가3", "홍삼", "효과", "피로",
-    "건강", "성분", "약", "복용", "추천",
+    "건강", "성분", "약", "복용", "추천", "최고", "완벽", "만족",
 )
 LABELS = frozenset({"NORMAL", "SUSPICIOUS"})
 SOURCE_TYPES = frozenset(
