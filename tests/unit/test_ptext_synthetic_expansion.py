@@ -2,6 +2,7 @@ from copy import deepcopy
 
 from app.training.p_text.build_synthetic_expansion_v1 import (
     KEYWORD_BALANCE_REVISED_PAIRS,
+    HUMAN_REVIEW_ROUND4_APPROVED_PAIRS,
     PAIRS,
     build_rows,
 )
@@ -15,6 +16,9 @@ def test_expansion_has_30_pairs_and_category_quota() -> None:
     assert report.counts["pairs"] == 30
     assert report.counts["rows"] == 60
     assert set(report.counts["category_pairs"].values()) == {5}
+    assert report.counts["human_reviewed_rows"] == 60
+    assert report.counts["human_approved_rows"] == 60
+    assert report.counts["training_ready_rows"] == 0
 
 
 def test_category_quota_error_fails() -> None:
@@ -41,10 +45,43 @@ def test_provenance_error_fails() -> None:
     assert any("source_type must be synthetic" in error for error in validate_synthetic_expansion(rows).errors)
 
 
-def test_human_reviewed_true_is_rejected() -> None:
+def test_human_approved_without_reviewed_is_rejected() -> None:
     rows = build_rows()
-    rows[0]["human_reviewed"] = True
-    assert any("human_reviewed must be false" in error for error in validate_synthetic_expansion(rows).errors)
+    rows[0]["human_reviewed"] = False
+    assert any("requires human_reviewed=true" in error for error in validate_synthetic_expansion(rows).errors)
+
+
+def test_round3_approval_history_is_preserved() -> None:
+    rows = build_rows()
+    approved = [row for row in rows if "human_review_round3_decision=APPROVE" in row["notes"]]
+    assert len(approved) == 6
+    assert all("human_review_round3_decision=APPROVE" in row["notes"] for row in approved)
+    assert validate_synthetic_expansion(rows).passed
+
+
+def test_round4_revised_pairs_are_human_approved() -> None:
+    rows = build_rows()
+    expected = {
+        f"synthetic-expansion-v1-p{number:03d}" for number in HUMAN_REVIEW_ROUND4_APPROVED_PAIRS
+    }
+    revised = [row for row in rows if row["parent_pair_id"] in expected]
+    unchanged = [row for row in rows if row["parent_pair_id"] not in expected]
+    assert len(revised) == 8
+    assert all(row["human_reviewed"] is True and row["human_approved"] is True for row in revised)
+    assert all("human_review_round4_decision=APPROVE" in row["notes"] for row in revised)
+    assert len(unchanged) == 52
+    assert all(row["human_reviewed"] is True and row["human_approved"] is True for row in unchanged)
+
+
+def test_round2_approval_history_is_preserved() -> None:
+    rows = build_rows()
+    approved = [row for row in rows if "human_review_round2_decision=APPROVE" in row["notes"]]
+    assert len(approved) == 14
+    assert all("human_review_round2_decision=APPROVE" in row["notes"] for row in approved)
+
+
+def test_agreed_status_is_not_used() -> None:
+    assert all(row["review_status"] != "AGREED" for row in build_rows())
 
 
 def test_extreme_praise_with_sufficient_evidence_normal_is_allowed() -> None:
@@ -99,7 +136,7 @@ def test_builder_does_not_depend_on_or_mutate_pilot_rows() -> None:
 
 def test_keyword_balance_terms_are_not_label_exclusive() -> None:
     rows = build_rows()
-    for keyword in ("건강", "성분", "추천", "완벽", "만족"):
+    for keyword in ("건강", "성분", "추천", "완벽", "만족", "효과"):
         labels = {row["label"] for row in rows if keyword in row["content"]}
         assert labels == {"NORMAL", "SUSPICIOUS"}, keyword
 

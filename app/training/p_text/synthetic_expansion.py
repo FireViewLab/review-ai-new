@@ -144,10 +144,39 @@ def validate_synthetic_expansion(
             report.errors.append(f"row {index}: source_type must be synthetic")
         if row.get("is_llm_generated") is not True:
             report.errors.append(f"row {index}: is_llm_generated must be true")
-        if row.get("human_reviewed") is not False:
-            report.errors.append(f"row {index}: human_reviewed must be false")
-        if row.get("human_approved") is not False:
-            report.errors.append(f"row {index}: human_approved must be false")
+        human_reviewed = row.get("human_reviewed")
+        human_approved = row.get("human_approved")
+        if not isinstance(human_reviewed, bool):
+            report.errors.append(f"row {index}: human_reviewed must be boolean")
+        if not isinstance(human_approved, bool):
+            report.errors.append(f"row {index}: human_approved must be boolean")
+        if human_approved is True and human_reviewed is not True:
+            report.errors.append(f"row {index}: human_approved=true requires human_reviewed=true")
+        notes = str(row.get("notes", ""))
+        if "human_review_round4_decision=APPROVE" in notes:
+            latest_human_decision = "APPROVE"
+        elif "human_review_round4_decision=REVISE" in notes:
+            latest_human_decision = "REVISE"
+        elif "human_review_round3_decision=APPROVE" in notes:
+            latest_human_decision = "APPROVE"
+        elif "human_review_round3_decision=REVISE" in notes:
+            latest_human_decision = "REVISE"
+        elif "human_review_round2_decision=APPROVE" in notes:
+            latest_human_decision = "APPROVE"
+        elif "human_review_round2_decision=REVISE" in notes:
+            latest_human_decision = "REVISE"
+        elif "human_decision=APPROVE" in notes:
+            latest_human_decision = "APPROVE"
+        elif "human_decision=REVISE" in notes:
+            latest_human_decision = "REVISE"
+        else:
+            latest_human_decision = ""
+        if human_reviewed is True and latest_human_decision != "APPROVE":
+            report.errors.append(f"row {index}: reviewed row requires an APPROVE review marker")
+        if latest_human_decision == "REVISE" and (
+            human_reviewed is not False or human_approved is not False
+        ):
+            report.errors.append(f"row {index}: revised version must await human re-review")
         if row.get("review_status") != "DRAFT":
             report.errors.append(f"row {index}: review_status must be DRAFT")
         if str(row.get("split", "")):

@@ -14,6 +14,20 @@ JSONL_PATH = OUTPUT_DIR / "annotation_synthetic_expansion_v1.jsonl"
 CSV_PATH = OUTPUT_DIR / "annotation_synthetic_expansion_v1.csv"
 CREATED_AT = "2026-10-03"
 KEYWORD_BALANCE_REVISED_PAIRS = frozenset({1, 2, 4, 7, 10, 15, 26, 27, 28, 29, 30})
+HUMAN_REVIEW_ROUND1_APPROVED_PAIRS = frozenset(
+    {1, 2, 3, 4, 5, 6, 7, 8, 9, 11, 14, 15, 16, 17, 18, 19, 20, 21, 22, 23}
+)
+HUMAN_REVIEW_ROUND1_REVISED_PAIRS = frozenset({10, 12, 13, 24, 25, 26, 27, 28, 29, 30})
+HUMAN_REVIEW_ROUND2_APPROVED_PAIRS = frozenset({10, 12, 13, 24, 25, 29, 30})
+HUMAN_REVIEW_ROUND2_REVISED_PAIRS = frozenset({26, 27, 28})
+HUMAN_REVIEW_ROUND3_APPROVED_PAIRS = frozenset({26, 27, 28})
+HUMAN_REVIEW_ROUND4_APPROVED_PAIRS = frozenset({10, 26, 27, 29})
+HUMAN_APPROVED_PAIRS = (
+    HUMAN_REVIEW_ROUND1_APPROVED_PAIRS
+    | HUMAN_REVIEW_ROUND2_APPROVED_PAIRS
+    | HUMAN_REVIEW_ROUND3_APPROVED_PAIRS
+    | HUMAN_REVIEW_ROUND4_APPROVED_PAIRS
+)
 
 # category, domain, difficulty, length, style, relation, suspicious, normal,
 # suspicious praise/evidence, normal praise/evidence
@@ -47,17 +61,17 @@ PAIRS = (
      "선반은 조립 전이지만 구조가 단단해 보여서 수납이 필요한 집이라면 무조건 들여놓아도 좋겠습니다.",
      "선반을 조립해 일주일간 가벼운 주방용품을 올려 두니 흔들림은 적었습니다. 무거운 물건에는 권하기 어렵습니다.", "medium", "none", "medium", "sufficient"),
     ("UNUSED_RECOMMENDATION", "health_supplement", "medium", "long", "polite", "label_only_omega_recommendation_vs_personal_course",
-     "오메가3는 복용 전이고 함량 표시만 살펴봤습니다. 이 구성이라면 건강을 챙기려는 분께 가장 먼저 추천할 만한 선택입니다.",
-     "건강 관리를 위해 오메가3를 두 달 복용했고 제게 특별한 불편은 없었습니다. 체감 효과는 분명하지 않아 같은 복용 조건인 분께만 참고용으로 추천합니다.", "extreme", "none", "low", "sufficient"),
+     "오메가3는 복용 전이고 함량 표시만 살펴봤습니다. 이 구성이라면 효과도 괜찮을 것 같아 건강을 챙기려는 분께 가장 먼저 추천할 만한 선택입니다.",
+     "건강 관리를 위해 오메가3를 두 달 복용했고 제게 특별한 불편은 없었습니다. 체감 효과는 분명하지 않아 같은 복용 조건인 분께만 참고용으로 추천합니다.", "medium", "none", "low", "sufficient"),
 
     ("NATURAL_PROMOTIONAL", "cosmetics", "easy", "medium", "conversational", "sample_touch_to_all_day_promotion_vs_bounded_wear",
      "손등에 한 번 펴 본 정도인데 발림이 꽤 좋네요. 하루 종일 촉촉한 피부를 원한다면 망설이지 말고 골라도 될 것 같아요.",
      "얼굴에 열흘 써 보니 오전에는 촉촉했지만 오후엔 당김이 있었어요. 건성 피부라면 보습제를 덧바를 생각으로 골라야 해요.", "medium", "limited", "low", "sufficient"),
     ("NATURAL_PROMOTIONAL", "food", "medium", "medium", "polite", "aroma_only_purchase_nudge_vs_tasted_preference",
-     "포장을 열어 향만 맡았는데 재료의 깊은 맛이 벌써 느껴집니다. 제대로 된 간식을 찾는 분이라면 바로 선택하셔도 후회 없겠습니다.",
+     "아직 먹어 보진 않고 포장을 열어 향만 맡았어요. 향이 괜찮아서 맛과 재료 품질도 분명 좋고 누구나 만족할 간식이니 바로 골라도 후회 없겠어요.",
      "직접 한 봉지를 먹어 보니 고소한 향은 좋았지만 제 입에는 단맛이 강했습니다. 덜 단 간식을 찾는 분은 참고하세요.", "medium", "limited", "medium", "sufficient"),
     ("NATURAL_PROMOTIONAL", "health_supplement", "hard", "long", "polite", "single_dose_routine_promotion_vs_short_observation",
-     "홍삼을 오늘 한 번 먹었는데 몸이 가벼워지는 흐름이 느껴집니다. 바쁜 일상에 활력을 더하려는 분이라면 매일 챙길 가치가 충분합니다.",
+     "홍삼을 오늘 처음 한 번 먹어 봤는데 몸이 조금 가벼운 느낌이었어요. 이 정도면 계속 먹는 동안 피로 걱정이 없을 것 같으니 바쁜 분들께도 꼭 권하고 싶어요.",
      "홍삼을 일주일 아침마다 먹었고 따뜻한 맛은 마음에 들었습니다. 활력 변화는 수면 상태와 겹쳐 아직 분명하게 말하기 어렵습니다.", "medium", "limited", "medium", "limited"),
     ("NATURAL_PROMOTIONAL", "electronics", "medium", "short", "concise", "display_only_productivity_pitch_vs_actual_setup",
      "전원만 켜 봤는데 화면이 선명하네요. 업무 효율을 확실히 높이고 싶다면 이 모니터가 답입니다.",
@@ -92,26 +106,26 @@ PAIRS = (
      "수납함의 칸 구성과 손잡이만 살펴봤고 물건은 넣지 않았어요. 이 구조라면 집안 정리가 저절로 되고 매일 찾는 시간도 확 줄겠네요.",
      "수납함에 문구류를 일주일 넣어 보니 작은 물건은 찾기 쉬웠어요. 부피 큰 물건에는 칸이 좁았어요.", "medium", "none", "low", "sufficient"),
     ("FEATURE_AS_PERSONAL_EXPERIENCE", "electronics", "hard", "long", "polite", "specification_as_recorded_performance_vs_measured_use",
-     "이어폰의 드라이버 사양과 소음 차단 설명만 읽었고 아직 듣지는 않았습니다. 그래도 어떤 장소에서 써도 음악이 또렷하고 주변 소음이 완전히 사라질 제품입니다.",
+     "아직 들어 보진 않았고 드라이버 사양과 소음 차단 설명만 봤어요. 그래도 어디서 쓰든 음악은 분명 선명하고 주변 소음도 완전히 막아 줄 것 같아요.",
      "이어폰을 출퇴근길에 일주일 사용해 보니 지하철 안내음은 일부 들렸고 저음은 제 취향에 맞았습니다. 조용한 실내 통화는 시험하지 못했습니다.", "medium", "none", "medium", "sufficient"),
     ("FEATURE_AS_PERSONAL_EXPERIENCE", "fashion", "easy", "short", "concise", "fabric_tag_as_all_day_comfort_vs_timed_wear",
-     "원단표만 보고 아직 입지 않았는데도 하루 종일 땀이 차지 않고 편안할 옷이라는 건 알겠어요.",
+     "아직 입어 보진 않았지만 원단표를 보니 통기성이 좋아 보여요. 하루 종일 입어도 땀이 차지 않고 편한 옷일 게 분명해요.",
      "두 시간 입어 보니 원단은 부드러웠지만 소매가 조금 조였어요. 하루 종일 착용감은 모르겠어요.", "medium", "none", "low", "limited"),
 
     ("EXAGGERATED_PRAISE_WITHOUT_EVIDENCE", "health_supplement", "easy", "short", "concise", "sealed_omega_extreme_claim_vs_supported_high_praise",
-     "오메가3는 아직 밀봉 상태지만 구성만 봐도 지금까지 본 건강 제품 중 최고예요. 누구에게나 완벽한 선택이라 벌써 만족스럽습니다.",
+     "오메가3는 아직 밀봉 상태지만 성분 구성이 아주 좋아 보여요. 복용하면 효과도 확실하고 누구에게나 잘 맞을 완벽한 제품일 것 같아서 기대가 큽니다.",
      "오메가3를 넉 달 복용했고 제 생활에는 거의 완벽할 만큼 먹기 편해 만족도가 최고였어요. 체감 효과는 개인마다 다를 수 있어요.", "extreme", "none", "extreme", "sufficient"),
     ("EXAGGERATED_PRAISE_WITHOUT_EVIDENCE", "health_supplement", "medium", "medium", "conversational", "one_sip_red_ginseng_praise_vs_long_use_praise",
-     "홍삼을 한 모금 맛본 게 전부인데 품질과 활력 효과까지 완벽해서 벌써 만족스럽네요. 이보다 좋은 제품은 없을 것 같아요.",
+     "홍삼을 한 모금 마셔 보니 맛은 꽤 만족스러웠어요. 이 정도 품질이면 꾸준히 먹을수록 활력 효과가 확실하고 누구에게나 잘 맞을 것 같아요.",
      "홍삼을 두 달 아침마다 먹었고 제 입맛과 생활 리듬에는 거의 완벽하게 맞아 최고로 만족해요. 다른 사람의 활력 효과까지 장담하진 못해요.", "extreme", "limited", "extreme", "sufficient"),
     ("EXAGGERATED_PRAISE_WITHOUT_EVIDENCE", "pharma_otc", "hard", "long", "polite", "box_only_extreme_relief_claim_vs_course_based_praise",
-     "상자와 사용 설명만 확인했는데 불편함을 해결하는 방식이 완벽해 보여 사용 전부터 만족스럽습니다. 모든 상황에서 가장 뛰어난 제품이라고 확신합니다.",
+     "상자와 사용 설명만 봤는데 구성이 꽤 만족스러워요. 불편한 부위를 완벽하게 관리해 주고 집이나 밖 어디서든 가장 뛰어난 제품일 것 같아요.",
      "설명에 따라 일주일 사용했고 제 사용 조건에는 거의 완벽할 만큼 간편해 매우 만족했습니다. 모든 상황에 같은 결과가 난다고 말할 수는 없습니다.", "extreme", "none", "extreme", "sufficient"),
     ("EXAGGERATED_PRAISE_WITHOUT_EVIDENCE", "cosmetics", "hard", "long", "polite", "single_swab_total_skin_claim_vs_sustained_observation",
-     "손목에 한 번 발라 본 것만으로도 보습과 탄력, 진정까지 완벽하다는 걸 알겠고 벌써 만족스럽습니다. 어떤 피부든 최고의 변화를 얻을 제품입니다.",
+     "손목에 한 번 발라 봤는데 벌써 꽤 만족스러워요. 이 정도면 보습, 탄력, 진정 효과까지 완벽하고 어떤 피부에도 최고의 변화를 줄 것 같아요.",
      "얼굴에 두 달 사용했고 제 건조함 관리에는 완벽에 가깝다고 느낄 만큼 만족스러웠습니다. 탄력과 진정 효과는 분리해 확인하지 못했습니다.", "extreme", "limited", "extreme", "sufficient"),
     ("EXAGGERATED_PRAISE_WITHOUT_EVIDENCE", "food", "medium", "medium", "conversational", "appearance_only_best_taste_vs_repeated_tasting_praise",
-     "사진과 포장만 봤는데 맛과 신선도 모두 완벽할 게 분명해서 벌써 만족스러워요. 누구나 최고라고 할 간식이니 실패할 수 없어요.",
+     "아직 먹어 보진 않았지만 사진과 포장이 마음에 들어 벌써 만족스러워요. 맛과 신선도도 완벽해서 누구나 좋아할 간식일 게 분명해요.",
      "세 번 주문해 먹었고 제 취향에는 거의 완벽할 만큼 식감과 단맛의 균형이 좋아 계속 만족했어요. 단맛을 싫어하면 다르게 느낄 수 있어요.", "extreme", "none", "extreme", "sufficient"),
 )
 
@@ -120,6 +134,30 @@ def _row(pair_number: int, label: str, item: tuple[str, ...]) -> dict[str, objec
     category, domain, difficulty, length_bucket, style, relation, suspicious, normal, sp, se, np, ne = item
     pair_id = f"synthetic-expansion-v1-p{pair_number:03d}"
     is_suspicious = label == "SUSPICIOUS"
+    human_approved = pair_number in HUMAN_APPROVED_PAIRS
+    note_parts = ["codex_candidate", "human_review_required"]
+    if pair_number in KEYWORD_BALANCE_REVISED_PAIRS:
+        note_parts.append("revision_reason=keyword_balance")
+    if pair_number in HUMAN_REVIEW_ROUND1_APPROVED_PAIRS:
+        note_parts.extend(("human_review_round=1", "human_decision=APPROVE"))
+    elif pair_number in HUMAN_REVIEW_ROUND1_REVISED_PAIRS:
+        note_parts.extend(
+            ("human_review_round=1", "human_decision=REVISE", "revision_reason=human_review_round1")
+        )
+    if pair_number in HUMAN_REVIEW_ROUND2_APPROVED_PAIRS:
+        note_parts.extend(("human_review_round2=2", "human_review_round2_decision=APPROVE"))
+    elif pair_number in HUMAN_REVIEW_ROUND2_REVISED_PAIRS:
+        note_parts.extend(
+            ("human_review_round2=2", "human_review_round2_decision=REVISE",
+             "revision_reason=human_review_round2")
+        )
+    if pair_number in HUMAN_REVIEW_ROUND3_APPROVED_PAIRS:
+        note_parts.extend(("human_review_round3=3", "human_review_round3_decision=APPROVE"))
+    if pair_number in HUMAN_REVIEW_ROUND4_APPROVED_PAIRS:
+        note_parts.extend(
+            ("human_review_round4_pending=effect_keyword_shortcut_mitigation",
+             "human_review_round4=4", "human_review_round4_decision=APPROVE")
+        )
     return {
         "sample_id": f"{pair_id}-{'s' if is_suspicious else 'n'}",
         "content": suspicious if is_suspicious else normal,
@@ -132,11 +170,7 @@ def _row(pair_number: int, label: str, item: tuple[str, ...]) -> dict[str, objec
         "generation_family_id": f"synthetic-expansion-v1-family-{pair_number:03d}",
         "difficulty": difficulty,
         "review_status": "DRAFT",
-        "notes": (
-            "codex_candidate; human_review_required; revision_reason=keyword_balance"
-            if pair_number in KEYWORD_BALANCE_REVISED_PAIRS
-            else "codex_candidate; human_review_required"
-        ),
+        "notes": "; ".join(note_parts),
         "author_id": "codex",
         "reviewer_ids": "",
         "split": "",
@@ -151,8 +185,8 @@ def _row(pair_number: int, label: str, item: tuple[str, ...]) -> dict[str, objec
         "style": style,
         "praise_intensity": sp if is_suspicious else np,
         "evidence_level": se if is_suspicious else ne,
-        "human_reviewed": False,
-        "human_approved": False,
+        "human_reviewed": human_approved,
+        "human_approved": human_approved,
     }
 
 
