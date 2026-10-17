@@ -11,9 +11,23 @@ from app.schemas.analysis import ProductAnalysisResponse, ReviewAnalysisResponse
 from app.services import analysis
 
 
-@pytest.mark.parametrize('p,score', [(0, 100), (.13, 87), (.5, 50), (1, 0)])
+@pytest.mark.parametrize('p,score', [(0, 100), (.13, 72), (.5, 50), (1, 0)])
 def test_probability_score_boundaries(p, score):
     assert p_text.probability_result(p)['text_score'] == score
+
+
+def test_temperature_scaling_preserves_raw_probability_and_label():
+    normal = p_text.probability_result(.002)
+    suspicious = p_text.probability_result(.8, threshold=.7)
+
+    assert normal == {
+        'text_score': 96,
+        'suspicious_probability': .002,
+        'predicted_label': 'NORMAL',
+    }
+    assert suspicious['suspicious_probability'] == .8
+    assert suspicious['predicted_label'] == 'SUSPICIOUS'
+    assert suspicious['text_score'] == 33
 
 
 @pytest.mark.parametrize('value', [-.01, 1.01, float('nan'), float('inf'), True])
@@ -56,7 +70,7 @@ def test_model_cache_serializes_first_load_and_uses_configured_path(monkeypatch)
         with ThreadPoolExecutor(max_workers=4) as pool:
             results = list(pool.map(p_text.predict_text_score, ['text'] * 8))
         factory.assert_called_once_with('custom-model')
-        assert all(r['text_score'] == 87 for r in results)
+        assert all(r['text_score'] == 72 for r in results)
     finally:
         p_text._predictor.cache_clear()
 
