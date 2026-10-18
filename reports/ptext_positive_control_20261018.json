@@ -1,0 +1,322 @@
+{
+  "metadata": {
+    "generated_at": "2026-10-18T22:48:16.416508+09:00",
+    "model_path": "C:\\Users\\kimha\\Projects\\review-ai-new\\models\\ptext-koelectra-v1-2epoch-20260929",
+    "model_version": "ptext-koelectra-v1-2epoch-20260929",
+    "runtime_function": "app.analyzers.p_text.predict_text_score",
+    "inference_config": {
+      "threshold": 0.5,
+      "max_length": 256,
+      "score_formula": "round((1-p_suspicious)*100)",
+      "dataset_sha256": "cd3812b26dd7c782e01ca919c0ff12e3a8bf57e81ecc218522c7e476a7490673"
+    },
+    "total_inference_calls": 19
+  },
+  "source_resolution": {
+    "panel_a_predictions": "C:\\Users\\kimha\\Projects\\review-ai-new\\reports\\ptext-koelectra-v1-2epoch-20260929\\predictions.jsonl",
+    "panel_a_content_workbook": "C:\\Users\\kimha\\Projects\\ai-ptext-data-prep\\outputs\\ptext_training_dataset_v2.xlsx",
+    "panel_a_selection": "SHA-256 stable selection; exact Excel row/review ID/label validation",
+    "panel_b_v3_baseline": "C:\\Users\\kimha\\Projects\\review-ai-new\\data\\ReView_Integrated_Review_Dataset_v3_2차검수.xlsx",
+    "panel_b_v4_current": "C:\\Users\\kimha\\Projects\\review-ai-new\\data\\ReView_Integrated_Review_Dataset_v4_3_전체재검수_SUSPICIOUS확정.xlsx",
+    "panel_b_selection": "v4.3 NORMAL SHA-256 stable sample of 5; all four v3.2 deduplicated SUSPICIOUS texts exact-matched into v4.3"
+  },
+  "panel_a": {
+    "summary": {
+      "status": "PASS",
+      "sample_count": 10,
+      "label_match_count": 10,
+      "expected_counts": {
+        "NORMAL": 5,
+        "SUSPICIOUS": 5
+      },
+      "reproduced_counts": {
+        "NORMAL": 5,
+        "SUSPICIOUS": 5
+      }
+    },
+    "samples": [
+      {
+        "control_id": "A-NORMAL-01-23917a49",
+        "source_type": "previous_model_real_normal",
+        "provenance": "previous-model expected; source label real_NORMAL_human",
+        "synthetic_type": null,
+        "content": "저렴한데 색상이 저렴해보이지 않고 고급스러움! 솔도 생각보다 짱짱해서 잘 안 꺾이더라구요\n 저렴한 솔들 한두번 쓰면 바로 망가지는데 얘넨 아직 꼿꼿해요. 민트 하나 핑크 하나 사서 욕실마다 다르게 뒀는데 둘 다 예뻐요",
+        "character_length": 121,
+        "expected_label": "NORMAL",
+        "historical_probability": 0.0021524520125240088,
+        "current_predicted_label": "NORMAL",
+        "current_suspicious_probability": 0.002152453176677227,
+        "current_text_score": 96,
+        "label_match": true,
+        "absolute_probability_delta": 1.1641532182693481e-09
+      },
+      {
+        "control_id": "A-NORMAL-02-a27c6973",
+        "source_type": "previous_model_real_normal",
+        "provenance": "previous-model expected; source label real_NORMAL_human",
+        "synthetic_type": null,
+        "content": "잔 짐이 많아서 항상 먼지가 너무 스트레스였는데요 친구 집에 갔다가 이런게 있다고?! 하면서 당장 집에와서 주문했어요 장식품 많은 분들 꼭 사세요...",
+        "character_length": 84,
+        "expected_label": "NORMAL",
+        "historical_probability": 0.0022395497653633356,
+        "current_predicted_label": "NORMAL",
+        "current_suspicious_probability": 0.0022395476698875427,
+        "current_text_score": 95,
+        "label_match": true,
+        "absolute_probability_delta": 2.0954757928848267e-09
+      },
+      {
+        "control_id": "A-NORMAL-03-2a0736a9",
+        "source_type": "previous_model_real_normal",
+        "provenance": "previous-model expected; source label real_NORMAL_human",
+        "synthetic_type": null,
+        "content": "인스타, 유튜브 등에서 바이칸 바이칸 거려서 솔이 다 거기서 거기라 생각했다가 세일때 사봤습니다. 확실히 솔이 빳빳하고 힘이 좋네요.. 아마 오래동안 쓸거같아요 ㅎ",
+        "character_length": 91,
+        "expected_label": "NORMAL",
+        "historical_probability": 0.002166441408917308,
+        "current_predicted_label": "NORMAL",
+        "current_suspicious_probability": 0.002166441176086664,
+        "current_text_score": 96,
+        "label_match": true,
+        "absolute_probability_delta": 2.3283064365386963e-10
+      },
+      {
+        "control_id": "A-NORMAL-04-8d17f4b7",
+        "source_type": "previous_model_real_normal",
+        "provenance": "previous-model expected; source label real_NORMAL_human",
+        "synthetic_type": null,
+        "content": "픽싱+밀착력좋은 제품입니다\n\n립라인에 일부러 써봤는데\n색상이 생각보다 진하다 생각되어서 립라인에 쓰긴 좀 아쉽습니다\n\n노크식이라 딸깍거리는게 개인적으론 불호입니다\n\n얇아서 쓰기좋아요!\n\n라스트픽 찬스로 6천원대에 샀어요 그나마 괜찮습니다",
+        "character_length": 132,
+        "expected_label": "NORMAL",
+        "historical_probability": 0.002147835213690996,
+        "current_predicted_label": "NORMAL",
+        "current_suspicious_probability": 0.0021478331182152033,
+        "current_text_score": 96,
+        "label_match": true,
+        "absolute_probability_delta": 2.0954757928848267e-09
+      },
+      {
+        "control_id": "A-NORMAL-05-00725888",
+        "source_type": "previous_model_real_normal",
+        "provenance": "previous-model expected; source label real_NORMAL_human",
+        "synthetic_type": null,
+        "content": "서서 돌돌이를 하면 먼지나 머리카락이 바로바로 \n붙어서 너무 좋더라구요\n침대에 있는 머리카락 제거하기에도 좋고 쇼파에\n있는 먼지나 머리카락 제거하기도 좋아옹",
+        "character_length": 87,
+        "expected_label": "NORMAL",
+        "historical_probability": 0.002233675913885236,
+        "current_predicted_label": "NORMAL",
+        "current_suspicious_probability": 0.0022336782421916723,
+        "current_text_score": 95,
+        "label_match": true,
+        "absolute_probability_delta": 2.3283064365386963e-09
+      },
+      {
+        "control_id": "A-SUSPICIOUS-01-ba5d225f",
+        "source_type": "previous_model_synthetic_suspicious",
+        "provenance": "previous-model expected; synthetic label (not human ground truth)",
+        "synthetic_type": "COPY_VARIATION",
+        "content": "선물용으로도 무난한 물건입니다. 기대에 부응하는 합리적인 가격대입니다. 여러 기준을 고르게 채운 물건입니다. 받아보는 순간부터 기대할 만한 물건이라는 점이 특징입니다. 가격이 부담스럽지 않은 편입니다. 기본기가 탄탄한 편이라는 점이 특징입니다. 소소한 일상을 편하게 만드는 물건입니다. 군더더기를 덜어낸 실용적인 물건입니다. 주변에도 알릴 만한 물건입니다. 무난하게 두루 쓰기 좋은 물건입니다. 다음 구매 때 눈여겨보세요. 비용에 비해 돋보이는 완성도입니다. 실속을 챙기기에 충분한 품질입니다. 마감을 신경 쓴 물건입니다. 다양한 용도에 잘 맞는 물건입니다.",
+        "character_length": 312,
+        "expected_label": "SUSPICIOUS",
+        "historical_probability": 0.9967150688171387,
+        "current_predicted_label": "SUSPICIOUS",
+        "current_suspicious_probability": 0.9967150688171387,
+        "current_text_score": 5,
+        "label_match": true,
+        "absolute_probability_delta": 0.0
+      },
+      {
+        "control_id": "A-SUSPICIOUS-02-7c9b5bd5",
+        "source_type": "previous_model_synthetic_suspicious",
+        "provenance": "previous-model expected; synthetic label (not human ground truth)",
+        "synthetic_type": "EXPERIENCE_FREE_CLAIM",
+        "content": "목적에 충실한 기본 기능만큼은 언제나 기대한 그대로일 거예요. 단정하게 정돈한 외형만큼은 언제나 기대한 그대로일 거예요. 꼼꼼하게 다듬은 마감은 누구에게든 똑같이 보장돼요.",
+        "character_length": 96,
+        "expected_label": "SUSPICIOUS",
+        "historical_probability": 0.9967613816261292,
+        "current_predicted_label": "SUSPICIOUS",
+        "current_suspicious_probability": 0.9967613816261292,
+        "current_text_score": 5,
+        "label_match": true,
+        "absolute_probability_delta": 0.0
+      },
+      {
+        "control_id": "A-SUSPICIOUS-03-96a22e8d",
+        "source_type": "previous_model_synthetic_suspicious",
+        "provenance": "previous-model expected; synthetic label (not human ground truth)",
+        "synthetic_type": "NO_USE_ASSERTIVE_RECOMMENDATION",
+        "content": "지금은 사용 전이라는 점을 밝히지만 엉킨 머리카락을 차분하게 풀어주는 관리가 필요하다면 다른 조건은 볼 필요도 없어요.\n다른 분들에게도 권하고 싶네요.\n두피에 남는 유분을 씻어내는 세정력이 필요하다면 다른 조건은 볼 필요도 없어요.\n푸석한 모발을 부드럽게 감싸는 관리 방식에서 부족할 일은 없을 겁니다.",
+        "character_length": 169,
+        "expected_label": "SUSPICIOUS",
+        "historical_probability": 0.9966036081314087,
+        "current_predicted_label": "SUSPICIOUS",
+        "current_suspicious_probability": 0.9966036081314087,
+        "current_text_score": 6,
+        "label_match": true,
+        "absolute_probability_delta": 0.0
+      },
+      {
+        "control_id": "A-SUSPICIOUS-04-a351ab5a",
+        "source_type": "previous_model_synthetic_suspicious",
+        "provenance": "previous-model expected; synthetic label (not human ground truth)",
+        "synthetic_type": "PRODUCT_DESCRIPTION_REPLACEMENT",
+        "content": "기본 기능을 먼저 보면 젖은 바닥의 물기를 한쪽으로 모으는 기능이에요. 넓은 면을 빠르게 훑어내는 접촉면이에요. 공간을 적게 차지하는 세워두기 방식이에요.",
+        "character_length": 86,
+        "expected_label": "SUSPICIOUS",
+        "historical_probability": 0.9969094395637512,
+        "current_predicted_label": "SUSPICIOUS",
+        "current_suspicious_probability": 0.9969094395637512,
+        "current_text_score": 5,
+        "label_match": true,
+        "absolute_probability_delta": 0.0
+      },
+      {
+        "control_id": "A-SUSPICIOUS-05-dae1aab3",
+        "source_type": "previous_model_synthetic_suspicious",
+        "provenance": "previous-model expected; synthetic label (not human ground truth)",
+        "synthetic_type": "PROMOTIONAL_TEMPLATE",
+        "content": "이제 고민을 끝내고 써보세요.\n비용에 비해 돋보이는 완성도입니다.\n깔끔한 인상을 주는 물건입니다.\n고민할 거리를 줄여주는 물건입니다.\n선물용으로도 무난한 물건입니다.",
+        "character_length": 92,
+        "expected_label": "SUSPICIOUS",
+        "historical_probability": 0.9969614148139954,
+        "current_predicted_label": "SUSPICIOUS",
+        "current_suspicious_probability": 0.9969614148139954,
+        "current_text_score": 5,
+        "label_match": true,
+        "absolute_probability_delta": 0.0
+      }
+    ]
+  },
+  "panel_b": {
+    "summary": {
+      "NORMAL": {
+        "sample_count": 5,
+        "model_NORMAL_count": 5,
+        "model_SUSPICIOUS_count": 0,
+        "model_unavailable_count": 0
+      },
+      "SUSPICIOUS": {
+        "sample_count": 4,
+        "model_NORMAL_count": 4,
+        "model_SUSPICIOUS_count": 0,
+        "model_unavailable_count": 0
+      }
+    },
+    "samples": [
+      {
+        "panel_id": "B-NORMAL-01-a517332e",
+        "human_label": "NORMAL",
+        "content": "아이들이 좋아하는 최애 샌드위치라서 자주 구매하네요",
+        "source_type": "human_reviewed_v4_3",
+        "provenance": "human-reviewed label; not externally verified authenticity ground truth",
+        "character_length": 28,
+        "current_predicted_label": "NORMAL",
+        "current_suspicious_probability": 0.0022747847251594067,
+        "current_text_score": 95,
+        "human_model_label_match": true
+      },
+      {
+        "panel_id": "B-NORMAL-02-f2267bf1",
+        "human_label": "NORMAL",
+        "content": "좀 크긴한데 진짜 편해요!\n통이너무넓은거만빼면 굿굿~~",
+        "source_type": "human_reviewed_v4_3",
+        "provenance": "human-reviewed label; not externally verified authenticity ground truth",
+        "character_length": 30,
+        "current_predicted_label": "NORMAL",
+        "current_suspicious_probability": 0.0021907987538725138,
+        "current_text_score": 96,
+        "human_model_label_match": true
+      },
+      {
+        "panel_id": "B-NORMAL-03-3ad5f056",
+        "human_label": "NORMAL",
+        "content": "아침식사마다 삶아 먹으니 늘 계란은 컬리서 주문해놔요\n세일도 해서 잘 먹고 있어요\n파손도 없고",
+        "source_type": "human_reviewed_v4_3",
+        "provenance": "human-reviewed label; not externally verified authenticity ground truth",
+        "character_length": 52,
+        "current_predicted_label": "NORMAL",
+        "current_suspicious_probability": 0.002161953831091523,
+        "current_text_score": 96,
+        "human_model_label_match": true
+      },
+      {
+        "panel_id": "B-NORMAL-04-5ea8f556",
+        "human_label": "NORMAL",
+        "content": "조아영 항상 쓰던대로 조아영 믿고 쓰구 있어여 ~~!!조아요",
+        "source_type": "human_reviewed_v4_3",
+        "provenance": "human-reviewed label; not externally verified authenticity ground truth",
+        "character_length": 33,
+        "current_predicted_label": "NORMAL",
+        "current_suspicious_probability": 0.0022653834894299507,
+        "current_text_score": 95,
+        "human_model_label_match": true
+      },
+      {
+        "panel_id": "B-NORMAL-05-5897a4f4",
+        "human_label": "NORMAL",
+        "content": "개이쁨 레알 진짜 여리아방섹시녀쌉가능 밑소매가 살짝 큰데 제가 팔이 짧아서 어쩔수업는거고 날씬해보임 색깔도 구리구리 색이 아니라 좀 세련된..?그런 색임 만족",
+        "source_type": "human_reviewed_v4_3",
+        "provenance": "human-reviewed label; not externally verified authenticity ground truth",
+        "character_length": 88,
+        "current_predicted_label": "NORMAL",
+        "current_suspicious_probability": 0.0021948968060314655,
+        "current_text_score": 96,
+        "human_model_label_match": true
+      },
+      {
+        "panel_id": "B-SUSPICIOUS-01-1d1573b8",
+        "human_label": "SUSPICIOUS",
+        "content": "메디힐 에센셜 마스크팩 (마데카소사이드 흔적 리페어)는 민감해진 피부를 진정시키면서 여드름 자국이나 붉은 흔적 케어에 초점을 맞춘 제품입니다. 순도 98% 마데카소사이드를 핵심 성분으로 사용하며, 민감성·건성 피부에도 사용할 수 있도록 설계되었습니다.",
+        "source_type": "human_reviewed_v3_2_carried_into_v4_3",
+        "provenance": "one of four v3.2 human-reviewed SUSPICIOUS texts, exactly matched in v4.3; not externally verified fake-review ground truth",
+        "character_length": 140,
+        "current_predicted_label": "NORMAL",
+        "current_suspicious_probability": 0.004860566463321447,
+        "current_text_score": 93,
+        "human_model_label_match": false
+      },
+      {
+        "panel_id": "B-SUSPICIOUS-02-4a8479b2",
+        "human_label": "SUSPICIOUS",
+        "content": "메디힐 에센셜 마스크팩 콜라겐(코어 탄력)은 탄력 저하와 건조함을 함께 관리하고 싶은 분들을 위한 시트 마스크입니다. 핵심 성분으로 순도 98% 저분자 비건 콜라겐을 담아 피부에 탄력감과 보습을 부여하는 데 초점을 맞춘 제품입니다.",
+        "source_type": "human_reviewed_v3_2_carried_into_v4_3",
+        "provenance": "one of four v3.2 human-reviewed SUSPICIOUS texts, exactly matched in v4.3; not externally verified fake-review ground truth",
+        "character_length": 129,
+        "current_predicted_label": "NORMAL",
+        "current_suspicious_probability": 0.22357141971588135,
+        "current_text_score": 65,
+        "human_model_label_match": false
+      },
+      {
+        "panel_id": "B-SUSPICIOUS-03-83ef0d06",
+        "human_label": "SUSPICIOUS",
+        "content": "펜트리 안쪽 깊숙한 곳까지 공간 200% 활용 가능해졌어요! 뭐가 들어있는지 한눈에 보이고 손잡이 잡고 슥 꺼내면 끝이라 진짜 편해요. 굴러다니던 식자재들 싹 정리되니까 속이 다 시원하네요 강추!",
+        "source_type": "human_reviewed_v3_2_carried_into_v4_3",
+        "provenance": "one of four v3.2 human-reviewed SUSPICIOUS texts, exactly matched in v4.3; not externally verified fake-review ground truth",
+        "character_length": 109,
+        "current_predicted_label": "NORMAL",
+        "current_suspicious_probability": 0.00218922714702785,
+        "current_text_score": 96,
+        "human_model_label_match": false
+      },
+      {
+        "panel_id": "B-SUSPICIOUS-04-daf381c3",
+        "human_label": "SUSPICIOUS",
+        "content": "흐규ㅠㅠㅠㅠㅠㅠ 진짜 짱 이뽀요ㅠㅠㅠㅠ ... 저처럼 여쿨 뮤트이신 분들은 우디 모브 무조건 사세요!!! 두번 사세요!! 열번 사세요!! 백번 사세요!! ... 사는 거 완전 강추!!",
+        "source_type": "human_reviewed_v3_2_carried_into_v4_3",
+        "provenance": "one of four v3.2 human-reviewed SUSPICIOUS texts, exactly matched in v4.3; not externally verified fake-review ground truth",
+        "character_length": 102,
+        "current_predicted_label": "NORMAL",
+        "current_suspicious_probability": 0.002306702546775341,
+        "current_text_score": 95,
+        "human_model_label_match": false
+      }
+    ]
+  },
+  "interpretation": {
+    "runtime_mismatch_assessment": "Panel A provides no evidence that runtime mismatch explains the low-information audit's all-NORMAL result.",
+    "human_suspicious_observation": "Among four human-reviewed SUSPICIOUS examples, the model returned NORMAL 4 and SUSPICIOUS 0; this is descriptive, not a recall estimate.",
+    "recommended_priority": "candidate expansion",
+    "next_step_detail": "Expand a provenance-controlled human-reviewed candidate set before calibration; the four-case panel is too small for a calibration decision."
+  }
+}
