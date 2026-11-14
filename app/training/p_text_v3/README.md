@@ -61,3 +61,19 @@ write a new bundle below the git-ignored `artifacts/p_text_v3_candidates/`
 directory. The two blind reviewer packets contain only annotation ID, display
 order, and content. Published Pilot exclusions and F-3.4.2 relations can be
 added without changing the selection contract.
+
+## Validation extension candidates
+
+`validation_extension.py` creates a separate, label-blind
+`validation_extension_v1` review queue. It excludes the original 400 rows and
+their products, exact hashes, duplicate clusters, and verified relations, then
+applies v2 and published Pilot exclusions. Retrieval categories are recorded
+only as sampling provenance; every selected row remains `UNLABELED` and is
+explicitly ineligible for training or threshold selection before human review.
+The default is a read-only dry run. Materialization is restricted to the
+git-ignored `artifacts/p_text_v3_validation_extensions/` root.
+
+`group_cv.py` provides a read-only Train-only group-fold feasibility report.
+It builds connected groups from product, exact content, duplicate cluster, and
+verified relation keys. Validation and Frozen Test rows are counted as excluded
+and never enter its fold plan.

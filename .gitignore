@@ -20,5 +20,6 @@ build/
 # Offline experiment outputs (model weights/checkpoints can be very large).
 artifacts/p_text_baseline/
 /artifacts/p_text_v3_candidates/
+/artifacts/p_text_v3_validation_extensions/
 
 data/p_text_v2/*.xlsx
