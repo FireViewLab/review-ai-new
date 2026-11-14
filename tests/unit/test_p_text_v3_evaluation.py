@@ -7,14 +7,16 @@ import pytest
 from app.training.p_text_v3.evaluation import (
     average_precision,
     binary_metrics,
+    calibrated_threshold_to_raw,
     evaluate_probabilities,
     score_distribution,
     select_validation_policy,
     temperature_scale_probability,
 )
 from app.training.p_text_v3.frozen_test import evaluate_pair, load_selection
-from app.training.p_text_v3.train import parse_args
+from app.training.p_text_v3.train import build_runtime_inference_config, parse_args
 from app.training.p_text_v3.validation_policy import run as freeze_validation_policy
+from app.analyzers import p_text
 
 
 def test_precision_recall_f1_pr_auc_confusion_and_brier():
@@ -37,6 +39,75 @@ def test_validation_policy_records_validation_only_and_honors_normal_fpr():
     assert policy["threshold_selection"]["selected_on"] == "validation_only"
     assert policy["threshold_selection"]["validation_normal_fpr"] == 0
     assert policy["temperature"] == 1
+    assert policy["threshold_space"] == "calibrated_probability"
+    assert policy["runtime_threshold_space"] == "raw_probability"
+    assert policy["runtime_raw_probability_threshold"] == policy["threshold"]
+
+
+@pytest.mark.parametrize("temperature", [0.25, 0.5, 1.0, 2.0, 5.0])
+@pytest.mark.parametrize("threshold", [1e-9, 0.01, 0.2, 0.5, 0.8, 0.99, 1 - 1e-9])
+def test_calibrated_threshold_to_raw_preserves_decisions(temperature, threshold):
+    raw_threshold = calibrated_threshold_to_raw(threshold, temperature)
+    lower = raw_threshold * 0.5
+    upper = raw_threshold + (1 - raw_threshold) * 0.5
+    assert temperature_scale_probability(lower, temperature) < threshold
+    assert lower < raw_threshold
+    assert temperature_scale_probability(upper, temperature) >= threshold
+    assert upper >= raw_threshold
+
+
+@pytest.mark.parametrize("threshold", [0.0, 1e-12, 0.1, 0.5, 0.9, 1 - 1e-12, 1.0])
+def test_temperature_one_keeps_threshold_unchanged(threshold):
+    assert calibrated_threshold_to_raw(threshold, 1.0) == pytest.approx(threshold, abs=1e-15)
+
+
+@pytest.mark.parametrize("threshold", [0.0, 1.0])
+@pytest.mark.parametrize("temperature", [0.1, 1.0, 10.0])
+def test_threshold_boundary_values_are_preserved(threshold, temperature):
+    assert calibrated_threshold_to_raw(threshold, temperature) == threshold
+
+
+@pytest.mark.parametrize("threshold", [-0.1, 1.1, float("nan"), float("inf"), True, "0.5", None])
+def test_invalid_calibrated_threshold_is_rejected(threshold):
+    with pytest.raises(ValueError, match="THRESHOLD_INVALID"):
+        calibrated_threshold_to_raw(threshold, 1.0)
+
+
+@pytest.mark.parametrize("temperature", [0, -1, float("nan"), float("inf"), True, "2", None])
+def test_invalid_calibration_temperature_is_rejected(temperature):
+    with pytest.raises(ValueError, match="TEMPERATURE_INVALID"):
+        calibrated_threshold_to_raw(0.5, temperature)
+
+
+def test_runtime_inference_config_uses_equivalent_raw_threshold_without_runtime_change():
+    selection = {
+        "threshold": 0.8,
+        "temperature": 2.0,
+        "threshold_space": "calibrated_probability",
+        "runtime_raw_probability_threshold": calibrated_threshold_to_raw(0.8, 2.0),
+    }
+    config = build_runtime_inference_config(selection, max_length=256, dataset_sha256="fixture-sha")
+    assert config["threshold_space"] == "raw_probability"
+    assert config["threshold"] == config["raw_probability_threshold"]
+    assert config["validation_calibrated_probability_threshold"] == 0.8
+    assert config["calibration_temperature"] == 2.0
+    for probability in (0.1, config["threshold"] * 0.99, min(1.0, config["threshold"] * 1.01), 1.0):
+        expected = "SUSPICIOUS" if temperature_scale_probability(probability, 2.0) >= 0.8 else "NORMAL"
+        assert p_text.probability_result(probability, config["threshold"])["predicted_label"] == expected
+
+
+def test_runtime_inference_config_rejects_mismatched_recorded_raw_threshold():
+    with pytest.raises(ValueError, match="RUNTIME_RAW_THRESHOLD_MISMATCH"):
+        build_runtime_inference_config(
+            {
+                "threshold": 0.8,
+                "temperature": 2.0,
+                "threshold_space": "calibrated_probability",
+                "runtime_raw_probability_threshold": 0.8,
+            },
+            max_length=256,
+            dataset_sha256="fixture-sha",
+        )
 
 
 def test_raw_calibrated_and_runtime_temperature_2_scores_are_separate():
@@ -74,6 +145,22 @@ def test_frozen_selection_rejects_test_fitted_policy(tmp_path):
     path = tmp_path / "selection.json"
     path.write_text(json.dumps({"fitted_on": "test", "threshold": 0.5, "temperature": 1.0}))
     with pytest.raises(ValueError, match="VALIDATION_ONLY"):
+        load_selection(path)
+
+
+def test_frozen_selection_rejects_threshold_space_or_conversion_mismatch(tmp_path):
+    path = tmp_path / "selection.json"
+    path.write_text(json.dumps({
+        "fitted_on": "validation_only", "threshold": 0.8, "temperature": 2.0,
+        "threshold_space": "raw_probability", "runtime_raw_probability_threshold": 0.8,
+    }))
+    with pytest.raises(ValueError, match="THRESHOLD_SPACE_INVALID"):
+        load_selection(path)
+    path.write_text(json.dumps({
+        "fitted_on": "validation_only", "threshold": 0.8, "temperature": 2.0,
+        "threshold_space": "calibrated_probability", "runtime_raw_probability_threshold": 0.8,
+    }))
+    with pytest.raises(ValueError, match="RAW_THRESHOLD_MISMATCH"):
         load_selection(path)
 
 

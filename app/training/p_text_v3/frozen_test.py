@@ -8,11 +8,12 @@ from __future__ import annotations
 
 import argparse
 import json
+import math
 from pathlib import Path
 from typing import Any, Mapping
 
 from .data_contract import load_dataset
-from .evaluation import evaluate_probabilities
+from .evaluation import calibrated_threshold_to_raw, evaluate_probabilities
 from .report import compare_frozen_test, render_markdown
 
 
@@ -26,6 +27,19 @@ def load_selection(path: str | Path) -> dict[str, float]:
         raise ValueError("SELECTION_THRESHOLD_INVALID")
     if isinstance(temperature, bool) or not isinstance(temperature, (int, float)) or temperature <= 0:
         raise ValueError("SELECTION_TEMPERATURE_INVALID")
+    if value.get("threshold_space", "calibrated_probability") != "calibrated_probability":
+        raise ValueError("SELECTION_THRESHOLD_SPACE_INVALID")
+    explicit_calibrated = value.get("calibrated_probability_threshold")
+    if explicit_calibrated is not None and float(explicit_calibrated) != float(threshold):
+        raise ValueError("SELECTION_CALIBRATED_THRESHOLD_MISMATCH")
+    explicit_raw = value.get("runtime_raw_probability_threshold")
+    expected_raw = calibrated_threshold_to_raw(float(threshold), float(temperature))
+    if explicit_raw is not None and (
+        isinstance(explicit_raw, bool)
+        or not isinstance(explicit_raw, (int, float))
+        or not math.isclose(float(explicit_raw), expected_raw, rel_tol=0, abs_tol=1e-15)
+    ):
+        raise ValueError("SELECTION_RAW_THRESHOLD_MISMATCH")
     return {"threshold": float(threshold), "temperature": float(temperature)}
 
 

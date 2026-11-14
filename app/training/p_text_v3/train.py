@@ -10,12 +10,17 @@ from __future__ import annotations
 import argparse
 from dataclasses import asdict, dataclass
 import json
+import math
 from pathlib import Path
 import time
 from typing import Any
 
 from .data_contract import TokenizedTextDataset, load_dataset
-from .evaluation import binary_metrics, select_validation_policy
+from .evaluation import (
+    binary_metrics,
+    calibrated_threshold_to_raw,
+    select_validation_policy,
+)
 
 
 @dataclass(frozen=True)
@@ -93,6 +98,47 @@ def _softmax_positive(logits) -> list[float]:
     shifted = values - values.max(axis=1, keepdims=True)
     exponentials = np.exp(shifted)
     return (exponentials[:, 1] / exponentials.sum(axis=1)).tolist()
+
+
+def build_runtime_inference_config(
+    selection: dict[str, Any], *, max_length: int, dataset_sha256: str
+) -> dict[str, Any]:
+    """Package a validation policy for the unchanged raw-threshold Runtime."""
+    if type(max_length) is not int or not 1 <= max_length <= 512:
+        raise ValueError("MAX_LENGTH_INVALID")
+    if not isinstance(dataset_sha256, str) or not dataset_sha256:
+        raise ValueError("DATASET_SHA256_INVALID")
+    calibrated_threshold = selection.get("threshold")
+    temperature = selection.get("temperature")
+    raw_threshold = calibrated_threshold_to_raw(calibrated_threshold, temperature)
+    recorded_raw = selection.get("runtime_raw_probability_threshold")
+    if recorded_raw is not None and (
+        isinstance(recorded_raw, bool)
+        or not isinstance(recorded_raw, (int, float))
+        or not math.isclose(float(recorded_raw), raw_threshold, rel_tol=0, abs_tol=1e-15)
+    ):
+        raise ValueError("RUNTIME_RAW_THRESHOLD_MISMATCH")
+    if selection.get("threshold_space", "calibrated_probability") != "calibrated_probability":
+        raise ValueError("VALIDATION_THRESHOLD_SPACE_INVALID")
+    return {
+        # Existing Runtime reads this key and compares it with raw P(SUSPICIOUS).
+        "threshold": raw_threshold,
+        "threshold_space": "raw_probability",
+        "raw_probability_threshold": raw_threshold,
+        "validation_calibrated_probability_threshold": float(calibrated_threshold),
+        "validation_threshold_space": "calibrated_probability",
+        "calibration_temperature": float(temperature),
+        "calibration_method": "sigmoid(logit(raw_probability)/temperature)",
+        "classification_equivalence": (
+            "raw_probability >= raw_probability_threshold iff calibrated_probability "
+            ">= validation_calibrated_probability_threshold"
+        ),
+        "max_length": max_length,
+        "score_formula": "round((1-temperature_scale(raw_probability,2.0))*100)",
+        "score_temperature": 2.0,
+        "runtime_temperature_2_is_display_only": True,
+        "dataset_sha256": dataset_sha256,
+    }
 
 
 def run(config: Config) -> dict[str, Any]:
@@ -221,14 +267,9 @@ def run(config: Config) -> dict[str, Any]:
     _write_json(output / "validation_selection.json", selection)
     _write_json(
         model_dir / "inference_config.json",
-        {
-            "threshold": selection["threshold"],
-            "calibration_temperature": selection["temperature"],
-            "max_length": config.max_length,
-            "raw_score_formula": "round((1-p_suspicious)*100)",
-            "runtime_temperature_2_is_display_only": True,
-            "dataset_sha256": data.summary["sha256"],
-        },
+        build_runtime_inference_config(
+            selection, max_length=config.max_length, dataset_sha256=data.summary["sha256"]
+        ),
     )
     return record
 

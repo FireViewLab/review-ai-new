@@ -30,6 +30,35 @@ def temperature_scale(probabilities: Sequence[float], temperature: float) -> lis
     return [temperature_scale_probability(value, temperature) for value in probabilities]
 
 
+def calibrated_threshold_to_raw(threshold: float, temperature: float) -> float:
+    """Convert a calibrated-probability threshold to its raw equivalent.
+
+    Calibration is ``sigmoid(logit(raw_probability) / temperature)``.  For a
+    positive finite temperature it is strictly monotonic, so comparing the
+    calibrated probability with ``threshold`` is equivalent to comparing the
+    raw probability with ``sigmoid(temperature * logit(threshold))``.
+    """
+    if isinstance(threshold, bool) or not isinstance(threshold, (int, float)):
+        raise ValueError("THRESHOLD_INVALID")
+    if isinstance(temperature, bool) or not isinstance(temperature, (int, float)):
+        raise ValueError("TEMPERATURE_INVALID")
+    threshold = float(threshold)
+    temperature = float(temperature)
+    if not math.isfinite(threshold) or not 0 <= threshold <= 1:
+        raise ValueError("THRESHOLD_INVALID")
+    if not math.isfinite(temperature) or temperature <= 0:
+        raise ValueError("TEMPERATURE_INVALID")
+    if threshold == 0:
+        return 0.0
+    if threshold == 1:
+        return 1.0
+    scaled_logit = temperature * math.log(threshold / (1 - threshold))
+    if scaled_logit >= 0:
+        return 1 / (1 + math.exp(-scaled_logit))
+    exponential = math.exp(scaled_logit)
+    return exponential / (1 + exponential)
+
+
 def confusion(labels: Sequence[int], probabilities: Sequence[float], threshold: float) -> list[list[int]]:
     _validate(labels, probabilities)
     if not 0 <= threshold <= 1:
@@ -243,11 +272,18 @@ def select_validation_policy(
     threshold = select_threshold(
         labels, calibrated, normal_mask=normal_mask, max_normal_fpr=max_normal_fpr
     )
+    calibrated_threshold = threshold["threshold"]
+    raw_threshold = calibrated_threshold_to_raw(calibrated_threshold, calibration["temperature"])
     return {
         "policy_version": "ptext-v3-validation-selection-v1",
         "fitted_on": "validation_only",
         "temperature": calibration["temperature"],
-        "threshold": threshold["threshold"],
+        "threshold": calibrated_threshold,
+        "threshold_space": "calibrated_probability",
+        "calibrated_probability_threshold": calibrated_threshold,
+        "runtime_raw_probability_threshold": raw_threshold,
+        "runtime_threshold_space": "raw_probability",
+        "calibration_method": "sigmoid(logit(raw_probability)/temperature)",
         "calibration": calibration,
         "threshold_selection": threshold,
         "runtime_temperature_2_is_display_only": True,
