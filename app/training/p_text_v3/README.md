@@ -37,6 +37,17 @@ cannot prove that reviewers worked independently or that credentials belong to
 the named people; those items remain recorded operational confirmations. The
 supported builder entry point has no option to skip this validation.
 
+## Non-official single-reviewer experiment
+
+`single_reviewer_experiment.py` is a separate, non-official path for one-person
+AI-assisted school-project experiments. It requires explicit
+`CONFIRMED_AS_DRAFT` provenance, preserves the 220/80/100 roles, applies the
+same Pilot and cross-split leakage protections, and writes only to a new path
+containing `experiment`. Its output is marked
+`SINGLE_REVIEWER_AI_ASSISTED_EXPERIMENT` and must not be represented as the
+official two-reviewer Human Ground Truth. Frozen Test labels were previously
+exposed during AI-assisted review, so this limitation remains in every report.
+
 ## Human-review candidate generation
 
 `candidate_generation.py` consumes the unlabeled 150K pool, the canonical v2
