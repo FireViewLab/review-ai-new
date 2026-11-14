@@ -3,6 +3,7 @@ from pathlib import Path
 
 import openpyxl
 import pytest
+from unittest.mock import patch
 
 from app.training.p_text_v3.build_dataset import adjudicated_binary_label, build_human_rows, run
 from app.training.p_text_v3.data_contract import (
@@ -270,12 +271,36 @@ def test_builder_end_to_end_writes_new_fixed_split_workbook_and_refuses_overwrit
     write_csv(role_path, ("annotation_id", "split"), roles)
     output = tmp_path / "v3.xlsx"
 
-    result = run(master_path, final_path, role_path, output)
+    evidence_paths = {
+        name: tmp_path / name
+        for name in ("guide.md", "contract.json", "packet.json", "reviewer_a.csv", "reviewer_b.csv")
+    }
+    for path in evidence_paths.values():
+        path.write_text("fixture", encoding="utf-8")
+    evidence_kwargs = {
+        "guideline_path": evidence_paths["guide.md"],
+        "review_contract_path": evidence_paths["contract.json"],
+        "source_packet_contract_path": evidence_paths["packet.json"],
+        "reviewer_a_path": evidence_paths["reviewer_a.csv"],
+        "reviewer_b_path": evidence_paths["reviewer_b.csv"],
+    }
+
+    with patch(
+        "app.training.p_text_v3.build_dataset.validate_human_review",
+        return_value={"status": "PASSED", "total_review_count": 6},
+    ) as validator:
+        result = run(master_path, final_path, role_path, output, **evidence_kwargs)
 
     assert output.is_file()
+    validator.assert_called_once()
+    assert result["official_human_review_validated"] is True
     assert result["automatic_labels_assigned"] is False
     assert result["sampling_groups_used_as_labels"] is False
     loaded = load_dataset(output)
     assert loaded.summary["counts"]["test"] == {"NORMAL": 1, "SUSPICIOUS": 1}
-    with pytest.raises(FileExistsError, match="OUTPUT_ALREADY_EXISTS"):
-        run(master_path, final_path, role_path, output)
+    with patch(
+        "app.training.p_text_v3.build_dataset.validate_human_review",
+        return_value={"status": "PASSED", "total_review_count": 6},
+    ):
+        with pytest.raises(FileExistsError, match="OUTPUT_ALREADY_EXISTS"):
+            run(master_path, final_path, role_path, output, **evidence_kwargs)

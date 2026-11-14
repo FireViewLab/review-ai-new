@@ -25,6 +25,7 @@ from .data_contract import (
     load_verified_relations,
     validate_rows,
 )
+from .human_review_validator import validate_human_review
 
 
 MASTER_REQUIRED = frozenset(
@@ -153,13 +154,28 @@ def run(
     roles_path: str | Path,
     output_path: str | Path,
     *,
+    guideline_path: str | Path,
+    review_contract_path: str | Path,
+    source_packet_contract_path: str | Path,
+    reviewer_a_path: str | Path,
+    reviewer_b_path: str | Path,
     base_v2_path: str | Path | None = None,
     exclusion_manifest: str | Path | None = None,
     verified_relations: str | Path | None = None,
 ) -> dict[str, Any]:
     masters = _read_csv(master_path, MASTER_REQUIRED)
-    finals = _read_csv(final_labels_path, FINAL_REQUIRED)
     roles = _read_csv(roles_path, frozenset(ROLE_FIELDS))
+    review_validation = validate_human_review(
+        master_rows=masters,
+        role_rows=roles,
+        guideline_path=guideline_path,
+        review_contract_path=review_contract_path,
+        source_packet_contract_path=source_packet_contract_path,
+        reviewer_a_path=reviewer_a_path,
+        reviewer_b_path=reviewer_b_path,
+        final_labels_path=final_labels_path,
+    )
+    finals = _read_csv(final_labels_path, FINAL_REQUIRED)
     exclusions = load_pilot_exclusions(exclusion_manifest)
     relations = load_verified_relations(verified_relations)
     human_rows, build_audit = build_human_rows(masters, finals, roles, exclusions=exclusions)
@@ -192,6 +208,8 @@ def run(
         "automatic_labels_assigned": False,
         "sampling_groups_used_as_labels": False,
         "split_generated": False,
+        "official_human_review_validated": True,
+        "human_review_validation": review_validation,
         "build": build_audit,
         "base_v2_train_rows": len(base_rows),
         "human_review_rows": len(human_rows),
@@ -200,6 +218,11 @@ def run(
             "master_sha256": file_sha256(master_path),
             "final_labels_sha256": file_sha256(final_labels_path),
             "roles_sha256": file_sha256(roles_path),
+            "guideline_sha256": file_sha256(guideline_path),
+            "review_contract_sha256": file_sha256(review_contract_path),
+            "source_packet_contract_sha256": file_sha256(source_packet_contract_path),
+            "reviewer_a_sha256": file_sha256(reviewer_a_path),
+            "reviewer_b_sha256": file_sha256(reviewer_b_path),
             "base_v2_sha256": file_sha256(base_v2_path) if base_v2_path is not None else None,
         },
     }
@@ -213,6 +236,11 @@ def parse_args(argv=None):
     parser.add_argument("--final-labels", required=True)
     parser.add_argument("--roles", required=True)
     parser.add_argument("--output", required=True)
+    parser.add_argument("--guideline", required=True)
+    parser.add_argument("--review-contract", required=True)
+    parser.add_argument("--source-packet-contract", required=True)
+    parser.add_argument("--reviewer-a", required=True)
+    parser.add_argument("--reviewer-b", required=True)
     parser.add_argument("--base-v2")
     parser.add_argument("--pilot-exclusions")
     parser.add_argument("--verified-relations")
@@ -226,6 +254,11 @@ def main() -> None:
         args.final_labels,
         args.roles,
         args.output,
+        guideline_path=args.guideline,
+        review_contract_path=args.review_contract,
+        source_packet_contract_path=args.source_packet_contract,
+        reviewer_a_path=args.reviewer_a,
+        reviewer_b_path=args.reviewer_b,
         base_v2_path=args.base_v2,
         exclusion_manifest=args.pilot_exclusions,
         verified_relations=args.verified_relations,

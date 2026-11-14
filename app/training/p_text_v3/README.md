@@ -23,6 +23,20 @@ never creates a train/validation/test split.
 
 All output paths must be new. Runtime activation is deliberately out of scope.
 
+## Official human-review gate
+
+`human_review_validator.py` must pass before `build_dataset.py` can write a
+training workbook. The builder requires the v0.3 guideline and contract, the
+immutable source packet contract, separate completed Reviewer A/B annotation
+files, and the final adjudication file. It verifies complete and unique ID
+sets, reviewer identity/timestamps, label and rationale vocabularies,
+agreement, adjudication, final-label linkage, and role-level binary counts.
+
+Files explicitly identified as AI-assisted staging are rejected. File evidence
+cannot prove that reviewers worked independently or that credentials belong to
+the named people; those items remain recorded operational confirmations. The
+supported builder entry point has no option to skip this validation.
+
 ## Human-review candidate generation
 
 `candidate_generation.py` consumes the unlabeled 150K pool, the canonical v2
