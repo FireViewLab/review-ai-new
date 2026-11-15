@@ -77,3 +77,13 @@ git-ignored `artifacts/p_text_v3_validation_extensions/` root.
 It builds connected groups from product, exact content, duplicate cluster, and
 verified relation keys. Validation and Frozen Test rows are counted as excluded
 and never enter its fold plan.
+
+## Interactive row review
+
+`row_review_cli.py` lets one local reviewer inspect each private review beside
+its AI-assisted draft and choose agree, modify, defer, or quit. Only agree or
+modify creates a confirmed row with an actual Asia/Seoul timestamp. Progress is
+atomically saved below the git-ignored validation-extension artifact root and
+can be resumed with the same command. Its outputs remain single-reviewer,
+AI-assisted, non-independent, non-official, and ineligible for training or
+threshold selection.
