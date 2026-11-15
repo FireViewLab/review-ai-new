@@ -19,6 +19,7 @@ from .data_contract import TokenizedTextDataset, load_dataset
 from .evaluation import (
     binary_metrics,
     calibrated_threshold_to_raw,
+    evaluate_probabilities,
     select_validation_policy,
 )
 
@@ -43,6 +44,8 @@ class Config:
     gradient_checkpointing: bool = True
     local_files_only: bool = True
     calibrate: bool = True
+    best_model_metric: str = "f1"
+    class_weighting: bool = False
 
 
 def parse_args(argv=None) -> Config:
@@ -65,10 +68,13 @@ def parse_args(argv=None) -> Config:
     parser.add_argument("--no-gradient-checkpointing", action="store_false", dest="gradient_checkpointing")
     parser.add_argument("--allow-model-download", action="store_false", dest="local_files_only")
     parser.add_argument("--no-calibration", action="store_false", dest="calibrate")
+    parser.add_argument("--best-model-metric", choices=("f1", "pr_auc"), default=Config.best_model_metric)
+    parser.add_argument("--class-weighting", action="store_true")
     parser.set_defaults(
         gradient_checkpointing=Config.gradient_checkpointing,
         local_files_only=Config.local_files_only,
         calibrate=Config.calibrate,
+        class_weighting=Config.class_weighting,
     )
     config = Config(**vars(parser.parse_args(argv)))
     positive = (
@@ -98,6 +104,49 @@ def _softmax_positive(logits) -> list[float]:
     shifted = values - values.max(axis=1, keepdims=True)
     exponentials = np.exp(shifted)
     return (exponentials[:, 1] / exponentials.sum(axis=1)).tolist()
+
+
+def balanced_class_weights(labels: list[int]) -> list[float]:
+    """Return n/(k*n_c) weights from Train labels only."""
+    if not labels or any(label not in (0, 1) for label in labels):
+        raise ValueError("CLASS_WEIGHT_LABELS_INVALID")
+    counts = [labels.count(0), labels.count(1)]
+    if any(count == 0 for count in counts):
+        raise ValueError("CLASS_WEIGHT_CLASS_MISSING")
+    total = len(labels)
+    return [total / (2 * count) for count in counts]
+
+
+def weighted_cross_entropy(logits, labels, weights):
+    """Small testable loss adapter used by the weighted Trainer only."""
+    import torch
+
+    weight = torch.as_tensor(weights, dtype=logits.dtype, device=logits.device)
+    return torch.nn.functional.cross_entropy(logits, labels, weight=weight)
+
+
+def trainer_selection_policy(config: Config) -> dict[str, Any]:
+    return {
+        "metric_for_best_model": config.best_model_metric,
+        "greater_is_better": True,
+        "load_best_model_at_end": True,
+    }
+
+
+def make_weighted_trainer(base_trainer, weights: list[float]):
+    """Create a Trainer subclass whose loss uses the frozen Train weights."""
+    frozen_weights = tuple(float(value) for value in weights)
+
+    class WeightedTrainer(base_trainer):
+        def compute_loss(self, model, inputs, return_outputs=False, num_items_in_batch=None):
+            labels = inputs.get("labels")
+            if labels is None:
+                raise ValueError("WEIGHTED_LOSS_LABELS_MISSING")
+            outputs = model(**inputs)
+            loss = weighted_cross_entropy(outputs.logits, labels, frozen_weights)
+            return (loss, outputs) if return_outputs else loss
+
+    return WeightedTrainer
 
 
 def build_runtime_inference_config(
@@ -182,6 +231,8 @@ def run(config: Config) -> dict[str, Any]:
         for split, rows in data.examples.items()
         if split in {"train", "validation"}
     }
+    train_labels = [int(row["label"]) for row in data.examples["train"]]
+    class_weights = balanced_class_weights(train_labels) if config.class_weighting else [1.0, 1.0]
 
     def compute_metrics(prediction) -> dict[str, float]:
         probabilities = _softmax_positive(prediction.predictions)
@@ -194,6 +245,7 @@ def run(config: Config) -> dict[str, Any]:
                 control.should_save = True
             return control
 
+    selection_policy = trainer_selection_policy(config)
     arguments = TrainingArguments(
         output_dir=str(output / "checkpoints"),
         num_train_epochs=config.epochs,
@@ -205,9 +257,9 @@ def run(config: Config) -> dict[str, Any]:
         weight_decay=config.weight_decay,
         eval_strategy="epoch",
         save_strategy="epoch",
-        load_best_model_at_end=True,
-        metric_for_best_model="f1",
-        greater_is_better=True,
+        load_best_model_at_end=selection_policy["load_best_model_at_end"],
+        metric_for_best_model=selection_policy["metric_for_best_model"],
+        greater_is_better=selection_policy["greater_is_better"],
         save_total_limit=2,
         seed=config.seed,
         data_seed=config.seed,
@@ -217,7 +269,8 @@ def run(config: Config) -> dict[str, Any]:
         logging_steps=20,
         disable_tqdm=True,
     )
-    trainer = Trainer(
+    trainer_class = make_weighted_trainer(Trainer, class_weights) if config.class_weighting else Trainer
+    trainer = trainer_class(
         model=model,
         args=arguments,
         train_dataset=datasets["train"],
@@ -227,7 +280,7 @@ def run(config: Config) -> dict[str, Any]:
         compute_metrics=compute_metrics,
         callbacks=[RecoveryCheckpointCallback()],
     )
-    output.mkdir(parents=True)
+    output.mkdir(parents=True, exist_ok=True)
     started = time.monotonic()
     training_result = trainer.train()
     # Validation is the only source for calibration and threshold selection.
@@ -243,6 +296,28 @@ def run(config: Config) -> dict[str, Any]:
         max_normal_fpr=config.max_normal_fpr,
         calibrate=config.calibrate,
     )
+    validation_results = evaluate_probabilities(
+        validation_labels,
+        validation_probabilities,
+        threshold=selection["threshold"],
+        calibration_temperature=selection["temperature"],
+    )
+    validation_results.update({
+        "validation_loss": validation_prediction.metrics.get("test_loss"),
+        "epoch_history": [
+            {
+                key.removeprefix("eval_"): value
+                for key, value in entry.items()
+                if key == "epoch" or key.startswith("eval_")
+            }
+            for entry in trainer.state.log_history
+            if "eval_pr_auc" in entry
+        ],
+        "best_checkpoint": trainer.state.best_model_checkpoint,
+        "best_model_metric": config.best_model_metric,
+        "checkpoint_selection_space": "uncalibrated validation metrics emitted after each epoch",
+        "calibration_and_threshold_space": "validation-only probabilities from the selected checkpoint",
+    })
     model_dir = output / "model"
     trainer.save_model(str(model_dir))
     tokenizer.save_pretrained(model_dir)
@@ -260,11 +335,25 @@ def run(config: Config) -> dict[str, Any]:
         "training_seconds": time.monotonic() - started,
         "training_metrics": training_result.metrics,
         "best_checkpoint": trainer.state.best_model_checkpoint,
+        "checkpoint_selection": selection_policy | {
+            "metric_source": "validation_only_epoch_metrics",
+            "calibration_or_threshold_used": False,
+        },
+        "class_weighting": {
+            "enabled": config.class_weighting,
+            "formula": "n_samples / (n_classes * class_count)",
+            "source_split": "train_only",
+            "train_class_counts": {"NORMAL": train_labels.count(0), "SUSPICIOUS": train_labels.count(1)},
+            "weights_by_label_id": {"0_NORMAL": class_weights[0], "1_SUSPICIOUS": class_weights[1]},
+            "validation_labels_used": False,
+        },
+        "epoch_validation_history": validation_results["epoch_history"],
         "selection": selection,
         "frozen_test_evaluated": False,
     }
     _write_json(output / "training_record.json", record)
     _write_json(output / "validation_selection.json", selection)
+    _write_json(output / "validation_results.json", validation_results)
     _write_json(
         model_dir / "inference_config.json",
         build_runtime_inference_config(
