@@ -1,0 +1,121 @@
+{
+  "contract_version": "ptext-human-review-contract-v0.3",
+  "guideline_version": "ptext-labeling-guide-v0.3",
+  "guideline_file": "ptext_labeling_guide_v0_3.md",
+  "guideline_sha256": "ea4d5d4566e0329bbd8129d58cfee5e82ee03b3ed5b5d7309e7d610c67e9054f",
+  "published_at": "2026-11-13",
+  "status": "OFFICIAL_FOR_HUMAN_REVIEW",
+  "supersedes_guideline_version": "ptext-labeling-guide-v0.2",
+  "policy_compatibility": "v0.2 label, signal, allowed-combination, blind-review, and adjudication policies are unchanged",
+  "source_packet_contract": {
+    "file": "artifacts/p_text_v3_candidates/candidate_400_review_ready_seed20261111_20261112/blind_review/review_contract_manifest.json",
+    "sha256": "1bd158e1dcb02bd715042f29eb453113df55d5a385430f05378e46bcefbc3707",
+    "annotation_count": 400,
+    "sampling_seed": 20261111
+  },
+  "review_mode": "TWO_INDEPENDENT_BLIND_REVIEWERS",
+  "reviewer_ids": [
+    "reviewer_a",
+    "reviewer_b"
+  ],
+  "packet_fields": [
+    "annotation_id",
+    "display_order",
+    "content"
+  ],
+  "annotation_fields": [
+    "annotation_id",
+    "annotator_id",
+    "text_status",
+    "signal_decision",
+    "signal_types",
+    "other_review_needed",
+    "rationale_codes",
+    "rationale_note",
+    "guideline_version",
+    "annotation_round",
+    "annotated_at"
+  ],
+  "adjudication_fields": [
+    "annotation_id",
+    "adjudication_status",
+    "adjudicator_id",
+    "final_text_status",
+    "final_signal_decision",
+    "final_signal_types",
+    "final_other_review_needed",
+    "adjudication_codes",
+    "adjudication_note",
+    "adjudicated_at"
+  ],
+  "vocabulary": {
+    "text_status": [
+      "SUFFICIENT",
+      "INSUFFICIENT",
+      "INVALID"
+    ],
+    "signal_decision": [
+      "PRESENT",
+      "ABSENT",
+      "UNCERTAIN",
+      "NOT_ASSESSED"
+    ],
+    "signal_types": [
+      "PRODUCT_DESCRIPTION_LIKE",
+      "NO_USE_ASSERTIVE_CLAIM",
+      "PROMOTIONAL_OR_SALES_LANGUAGE",
+      "HIGH_CERTAINTY_EFFICACY_CLAIM",
+      "WITHIN_REVIEW_REPETITION"
+    ],
+    "rationale_codes": [
+      "PROPOSED_BOUNDARY_EFFICACY_CLAIM",
+      "PROPOSED_REPEAT_WITHIN_TEXT",
+      "PROPOSED_BOUNDARY_PROMOTIONAL_LANGUAGE",
+      "PROPOSED_LOW_INFO_NOT_ASSESSED",
+      "PROPOSED_BOUNDARY_CONTEXT_UNCLEAR",
+      "PROPOSED_PRODUCT_INFO_DOMINANT",
+      "PROPOSED_BOUNDARY_PROMO_EFFICACY",
+      "PROPOSED_BOUNDARY_PRODUCT_DESCRIPTION"
+    ]
+  },
+  "allowed_combinations": [
+    {
+      "text_status": "SUFFICIENT",
+      "signal_decision": "PRESENT",
+      "signal_types": "ONE_OR_MORE_REQUIRED"
+    },
+    {
+      "text_status": "SUFFICIENT",
+      "signal_decision": "ABSENT",
+      "signal_types": "MUST_BE_EMPTY"
+    },
+    {
+      "text_status": "SUFFICIENT",
+      "signal_decision": "UNCERTAIN",
+      "signal_types": "ZERO_OR_MORE_CANDIDATES"
+    },
+    {
+      "text_status": "INSUFFICIENT",
+      "signal_decision": "NOT_ASSESSED",
+      "signal_types": "MUST_BE_EMPTY"
+    },
+    {
+      "text_status": "INVALID",
+      "signal_decision": "NOT_ASSESSED",
+      "signal_types": "MUST_BE_EMPTY"
+    }
+  ],
+  "rationale_policy": {
+    "rationale_codes_are_signal_types": false,
+    "proposed_codes_are_ground_truth": false,
+    "proposed_codes_auto_determine_labels": false,
+    "human_review_required": true
+  },
+  "independence_policy": {
+    "other_reviewer_results_hidden_until_completion": true,
+    "sampling_model_and_split_metadata_hidden": true,
+    "raw_reviewer_labels_immutable_during_adjudication": true,
+    "ai_assisted_staging_is_independent_human_review": false,
+    "ai_proposals_are_preserved_as_separate_provenance": true
+  }
+}

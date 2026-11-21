@@ -3,7 +3,9 @@
 import pytest
 
 from app.analyzers.network import (
+    NetworkEvidenceState,
     NetworkReview,
+    NetworkScoringPolicy,
     _from_similarities,
     analyze_network,
     analyze_network_batch,
@@ -32,6 +34,10 @@ def test_no_comparison_reviews_is_unavailable() -> None:
     result = analyze_network(target, ())
     assert result.network_score == -1
     assert result.unavailable_reason == "no_comparison_reviews"
+    assert result.evidence.evidence_state is NetworkEvidenceState.NO_PEERS
+    assert result.evidence.peer_count == 0
+    assert result.evidence.informative_peer_count == 0
+    assert result.evidence.valid_pair_count == 0
 
 
 def test_low_similarity_with_valid_comparison_is_unavailable() -> None:
@@ -42,6 +48,114 @@ def test_low_similarity_with_valid_comparison_is_unavailable() -> None:
     assert result.features.similarity_max == 0.5
     assert result.features.similar_review_count == 0
     assert result.reasons == ()
+    assert result.evidence.evidence_state is NetworkEvidenceState.COMPARISON_SUFFICIENT_NO_PATTERN
+    assert result.evidence.peer_count == 2
+    assert result.evidence.informative_peer_count == 2
+    assert result.evidence.valid_pair_count == 2
+    assert result.evidence.above_score_floor_count == 0
+    assert result.evidence.strong_similarity_count == 0
+    assert result.evidence.unavailable_reason == "no_meaningful_similarity_evidence"
+
+
+def test_insufficient_target_text_has_peer_scope_without_valid_pair() -> None:
+    results = batch("짧음", "충분한 비교 정보를 포함한 실제 사용 후기 문장입니다")
+    short = results[0]
+    assert short.available is False
+    assert short.evidence.evidence_state is NetworkEvidenceState.INSUFFICIENT_TEXT
+    assert short.evidence.peer_count == 1
+    assert short.evidence.informative_peer_count == 1
+    assert short.evidence.valid_pair_count == 0
+    assert short.unavailable_reason == "similarity_unavailable"
+
+
+def test_weak_above_floor_exposes_rounded_100_boundary_without_policy_change() -> None:
+    result = _from_similarities([0.5103])
+    assert result.available is True
+    assert result.p_network == 100.0
+    assert result.reasons == ()
+    assert result.evidence.evidence_state is NetworkEvidenceState.WEAK_ABOVE_FLOOR
+    assert result.evidence.above_score_floor_count == 1
+    assert result.evidence.strong_similarity_count == 0
+    assert result.evidence.similarity_max == pytest.approx(0.5103)
+
+
+@pytest.mark.parametrize(
+    ("similarity", "baseline_available", "strong_available"),
+    [
+        (0.49, False, False),
+        (0.50, False, False),
+        (0.5103, True, False),
+        (0.8499, True, False),
+        (0.85, True, True),
+        (1.00, True, True),
+    ],
+)
+def test_strong_evidence_policy_boundary(
+    similarity: float,
+    baseline_available: bool,
+    strong_available: bool,
+) -> None:
+    baseline = _from_similarities([similarity])
+    experimental = _from_similarities(
+        [similarity], policy=NetworkScoringPolicy.STRONG_EVIDENCE_V1
+    )
+
+    assert baseline.available is baseline_available
+    assert experimental.available is strong_available
+    if 0.50 < similarity < 0.85:
+        assert baseline.evidence.evidence_state is NetworkEvidenceState.WEAK_ABOVE_FLOOR
+        assert experimental.evidence.evidence_state is NetworkEvidenceState.WEAK_ABOVE_FLOOR
+        assert experimental.p_network is None
+        assert experimental.unavailable_reason == "strong_similarity_evidence_required"
+    if similarity >= 0.85:
+        assert experimental.p_network == baseline.p_network
+        assert experimental.reasons == baseline.reasons
+
+
+def test_strong_evidence_policy_preserves_no_peer_and_insufficient_text() -> None:
+    target = review("target", "충분한 길이의 실제 사용 후기 문장입니다.")
+    no_peer = analyze_network(
+        target, (), policy=NetworkScoringPolicy.STRONG_EVIDENCE_V1
+    )
+    insufficient = analyze_network_batch(
+        (review("short", "짧음"), target),
+        policy=NetworkScoringPolicy.STRONG_EVIDENCE_V1,
+    )[0]
+
+    assert no_peer.evidence.evidence_state is NetworkEvidenceState.NO_PEERS
+    assert no_peer.unavailable_reason == "no_comparison_reviews"
+    assert insufficient.evidence.evidence_state is NetworkEvidenceState.INSUFFICIENT_TEXT
+    assert insufficient.available is False
+
+
+def test_strong_evidence_policy_keeps_multiple_strong_peers_and_reason() -> None:
+    similarities = [0.85, 0.91, 1.0]
+    baseline = _from_similarities(similarities)
+    experimental = _from_similarities(
+        similarities, policy=NetworkScoringPolicy.STRONG_EVIDENCE_V1
+    )
+
+    assert experimental.available is True
+    assert experimental.p_network == baseline.p_network
+    assert experimental.evidence.strong_similarity_count == 3
+    assert experimental.evidence.evidence_state is NetworkEvidenceState.STRONG_PAIR
+    assert experimental.reasons == baseline.reasons
+
+
+def test_unknown_network_policy_fails_closed() -> None:
+    with pytest.raises(TypeError, match="NetworkScoringPolicy"):
+        _from_similarities([0.9], policy="network_strong_evidence_v1")
+
+
+def test_strong_pair_and_cluster_evidence_priority() -> None:
+    pair = _from_similarities([0.51, 0.85, 0.91])
+    cluster = _from_similarities([0.85] * 5 + [0.51])
+    assert pair.evidence.evidence_state is NetworkEvidenceState.STRONG_PAIR
+    assert pair.evidence.above_score_floor_count == 3
+    assert pair.evidence.strong_similarity_count == 2
+    assert cluster.evidence.evidence_state is NetworkEvidenceState.STRONG_CLUSTER
+    assert cluster.evidence.above_score_floor_count == 6
+    assert cluster.evidence.strong_similarity_count == 5
 
 
 def test_similarity_above_score_floor_keeps_continuous_score() -> None:

@@ -4,6 +4,8 @@ __pycache__/
 *.pyd
 *.egg-info/
 .pytest_cache/
+/.pytest_tmp_*/
+/.tmp_pytest_*/
 .mypy_cache/
 .ruff_cache/
 .venv/
@@ -17,5 +19,7 @@ dist/
 build/
 # Offline experiment outputs (model weights/checkpoints can be very large).
 artifacts/p_text_baseline/
+/artifacts/p_text_v3_candidates/
+/artifacts/p_text_v3_validation_extensions/
 
 data/p_text_v2/*.xlsx

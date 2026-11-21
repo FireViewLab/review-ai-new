@@ -1,0 +1,2233 @@
+{
+  "status": "complete",
+  "metadata": {
+    "generated_at": "2026-10-18T20:35:43.673571+09:00",
+    "model_path": "C:\\Users\\kimha\\Projects\\review-ai-new\\models\\ptext-koelectra-v1-2epoch-20260929",
+    "model_version": "ptext-koelectra-v1-2epoch-20260929",
+    "inference_config": {
+      "threshold": 0.5,
+      "max_length": 256,
+      "score_formula": "round((1-p_suspicious)*100)",
+      "dataset_sha256": "cd3812b26dd7c782e01ca919c0ff12e3a8bf57e81ecc218522c7e476a7490673"
+    },
+    "runtime_function": "app.analyzers.p_text.predict_text_score",
+    "sampling_method": "Per platform x length bucket, select the lexicographically smallest SHA-256 digests of platform + normalized content; duplicate normalized content is excluded. A separate full row-key SHA-256 chooses canonical metadata deterministically.",
+    "pilot_per_bucket": 10,
+    "full_per_bucket": 50,
+    "source_files": {
+      "elevenst": "C:\\Users\\kimha\\OneDrive\\Desktop\\review-export-20261017\\review-export-20261017\\reviews_elevenst.csv\\reviews_elevenst.csv",
+      "kurly": "C:\\Users\\kimha\\OneDrive\\Desktop\\review-export-20261017\\review-export-20261017\\reviews_kurly.csv\\reviews_kurly.csv",
+      "musinsa": "C:\\Users\\kimha\\OneDrive\\Desktop\\review-export-20261017\\review-export-20261017\\reviews_musinsa.csv\\reviews_musinsa.csv",
+      "naver": "C:\\Users\\kimha\\OneDrive\\Desktop\\review-export-20261017\\review-export-20261017\\reviews_naver.csv\\reviews_naver.csv",
+      "ohouse": "C:\\Users\\kimha\\OneDrive\\Desktop\\review-export-20261017\\review-export-20261017\\reviews_ohouse.csv\\reviews_ohouse.csv",
+      "oliveyoung": "C:\\Users\\kimha\\OneDrive\\Desktop\\review-export-20261017\\review-export-20261017\\reviews_oliveyoung.csv\\reviews_oliveyoung.csv"
+    },
+    "normalization": "\" \".join(str(content).split()); null becomes blank",
+    "length_definition": "Python len(normalized_content)"
+  },
+  "population": {
+    "total_raw_rows": 1151943,
+    "blank_rows": 0,
+    "overall_length_buckets": {
+      "1~5": {
+        "raw_row_count": 436,
+        "raw_row_ratio": 0.0003784909496390012,
+        "unique_normalized_content_count": 193
+      },
+      "6~10": {
+        "raw_row_count": 25829,
+        "raw_row_ratio": 0.022422116372077437,
+        "unique_normalized_content_count": 18496
+      },
+      "11~20": {
+        "raw_row_count": 242014,
+        "raw_row_ratio": 0.21009199239892945,
+        "unique_normalized_content_count": 211588
+      },
+      "21~40": {
+        "raw_row_count": 324261,
+        "raw_row_ratio": 0.2814904904148903,
+        "unique_normalized_content_count": 300860
+      },
+      "41~80": {
+        "raw_row_count": 287609,
+        "raw_row_ratio": 0.24967294388698053,
+        "unique_normalized_content_count": 257776
+      },
+      "81+": {
+        "raw_row_count": 271794,
+        "raw_row_ratio": 0.23594396597748327,
+        "unique_normalized_content_count": 249523
+      }
+    },
+    "platforms": {
+      "elevenst": {
+        "raw_review_count": 171052,
+        "blank_content_count": 0,
+        "length_buckets": {
+          "1~5": {
+            "raw_row_count": 393,
+            "raw_row_ratio": 0.002297546944788719,
+            "unique_normalized_content_count": 169
+          },
+          "6~10": {
+            "raw_row_count": 1969,
+            "raw_row_ratio": 0.011511119425671726,
+            "unique_normalized_content_count": 1318
+          },
+          "11~20": {
+            "raw_row_count": 20000,
+            "raw_row_ratio": 0.1169235086406473,
+            "unique_normalized_content_count": 15333
+          },
+          "21~40": {
+            "raw_row_count": 27537,
+            "raw_row_ratio": 0.16098613287187521,
+            "unique_normalized_content_count": 24642
+          },
+          "41~80": {
+            "raw_row_count": 81556,
+            "raw_row_ratio": 0.4767906835348315,
+            "unique_normalized_content_count": 65781
+          },
+          "81+": {
+            "raw_row_count": 39597,
+            "raw_row_ratio": 0.23149100858218555,
+            "unique_normalized_content_count": 35289
+          }
+        }
+      },
+      "kurly": {
+        "raw_review_count": 463843,
+        "blank_content_count": 0,
+        "length_buckets": {
+          "1~5": {
+            "raw_row_count": 41,
+            "raw_row_ratio": 8.839197745788984e-05,
+            "unique_normalized_content_count": 25
+          },
+          "6~10": {
+            "raw_row_count": 23836,
+            "raw_row_ratio": 0.051388077431372255,
+            "unique_normalized_content_count": 17318
+          },
+          "11~20": {
+            "raw_row_count": 221801,
+            "raw_row_ratio": 0.47818119493018113,
+            "unique_normalized_content_count": 196610
+          },
+          "21~40": {
+            "raw_row_count": 147267,
+            "raw_row_ratio": 0.3174932035192942,
+            "unique_normalized_content_count": 141505
+          },
+          "41~80": {
+            "raw_row_count": 53926,
+            "raw_row_ratio": 0.11625916527790653,
+            "unique_normalized_content_count": 52215
+          },
+          "81+": {
+            "raw_row_count": 16972,
+            "raw_row_ratio": 0.03658996686378796,
+            "unique_normalized_content_count": 16492
+          }
+        }
+      },
+      "musinsa": {
+        "raw_review_count": 118192,
+        "blank_content_count": 0,
+        "length_buckets": {
+          "1~5": {
+            "raw_row_count": 2,
+            "raw_row_ratio": 1.692161906051171e-05,
+            "unique_normalized_content_count": 2
+          },
+          "6~10": {
+            "raw_row_count": 4,
+            "raw_row_ratio": 3.384323812102342e-05,
+            "unique_normalized_content_count": 4
+          },
+          "11~20": {
+            "raw_row_count": 62,
+            "raw_row_ratio": 0.000524570190875863,
+            "unique_normalized_content_count": 58
+          },
+          "21~40": {
+            "raw_row_count": 56529,
+            "raw_row_ratio": 0.47828110193583323,
+            "unique_normalized_content_count": 52532
+          },
+          "41~80": {
+            "raw_row_count": 39313,
+            "raw_row_ratio": 0.3326198050629484,
+            "unique_normalized_content_count": 36920
+          },
+          "81+": {
+            "raw_row_count": 22282,
+            "raw_row_ratio": 0.18852375795316095,
+            "unique_normalized_content_count": 20729
+          }
+        }
+      },
+      "naver": {
+        "raw_review_count": 1286,
+        "blank_content_count": 0,
+        "length_buckets": {
+          "1~5": {
+            "raw_row_count": 0,
+            "raw_row_ratio": 0.0,
+            "unique_normalized_content_count": 0
+          },
+          "6~10": {
+            "raw_row_count": 20,
+            "raw_row_ratio": 0.015552099533437015,
+            "unique_normalized_content_count": 18
+          },
+          "11~20": {
+            "raw_row_count": 143,
+            "raw_row_ratio": 0.11119751166407466,
+            "unique_normalized_content_count": 135
+          },
+          "21~40": {
+            "raw_row_count": 161,
+            "raw_row_ratio": 0.12519440124416797,
+            "unique_normalized_content_count": 161
+          },
+          "41~80": {
+            "raw_row_count": 306,
+            "raw_row_ratio": 0.2379471228615863,
+            "unique_normalized_content_count": 304
+          },
+          "81+": {
+            "raw_row_count": 656,
+            "raw_row_ratio": 0.5101088646967341,
+            "unique_normalized_content_count": 644
+          }
+        }
+      },
+      "ohouse": {
+        "raw_review_count": 6828,
+        "blank_content_count": 0,
+        "length_buckets": {
+          "1~5": {
+            "raw_row_count": 0,
+            "raw_row_ratio": 0.0,
+            "unique_normalized_content_count": 0
+          },
+          "6~10": {
+            "raw_row_count": 0,
+            "raw_row_ratio": 0.0,
+            "unique_normalized_content_count": 0
+          },
+          "11~20": {
+            "raw_row_count": 1,
+            "raw_row_ratio": 0.00014645577035735208,
+            "unique_normalized_content_count": 1
+          },
+          "21~40": {
+            "raw_row_count": 39,
+            "raw_row_ratio": 0.0057117750439367315,
+            "unique_normalized_content_count": 39
+          },
+          "41~80": {
+            "raw_row_count": 425,
+            "raw_row_ratio": 0.062243702401874636,
+            "unique_normalized_content_count": 414
+          },
+          "81+": {
+            "raw_row_count": 6363,
+            "raw_row_ratio": 0.9318980667838312,
+            "unique_normalized_content_count": 6245
+          }
+        }
+      },
+      "oliveyoung": {
+        "raw_review_count": 390742,
+        "blank_content_count": 0,
+        "length_buckets": {
+          "1~5": {
+            "raw_row_count": 0,
+            "raw_row_ratio": 0.0,
+            "unique_normalized_content_count": 0
+          },
+          "6~10": {
+            "raw_row_count": 0,
+            "raw_row_ratio": 0.0,
+            "unique_normalized_content_count": 0
+          },
+          "11~20": {
+            "raw_row_count": 7,
+            "raw_row_ratio": 1.7914634208761793e-05,
+            "unique_normalized_content_count": 7
+          },
+          "21~40": {
+            "raw_row_count": 92728,
+            "raw_row_ratio": 0.23731260013000907,
+            "unique_normalized_content_count": 82013
+          },
+          "41~80": {
+            "raw_row_count": 112083,
+            "raw_row_ratio": 0.28684656371723544,
+            "unique_normalized_content_count": 102158
+          },
+          "81+": {
+            "raw_row_count": 185924,
+            "raw_row_ratio": 0.47582292151854677,
+            "unique_normalized_content_count": 170128
+          }
+        }
+      }
+    },
+    "unique_count_method": "cardinality of SHA-256 digests of normalized content; collision risk is negligible"
+  },
+  "population_scan_elapsed_seconds": 24.034290799871087,
+  "pilot": {
+    "status": "succeeded",
+    "sample_count": 284,
+    "elapsed_seconds": 37.7920962003991,
+    "unavailable_count": 0,
+    "runtime_errors": 0,
+    "model_load_succeeded": true
+  },
+  "sample": {
+    "total_inferred": 1296,
+    "unique_normalized_content": true,
+    "bucket_sample_counts": {
+      "1~5": 77,
+      "6~10": 122,
+      "11~20": 208,
+      "21~40": 289,
+      "41~80": 300,
+      "81+": 300
+    },
+    "platform_and_bucket_sample_counts": {
+      "elevenst": {
+        "1~5": 50,
+        "6~10": 50,
+        "11~20": 50,
+        "21~40": 50,
+        "41~80": 50,
+        "81+": 50
+      },
+      "kurly": {
+        "1~5": 25,
+        "6~10": 50,
+        "11~20": 50,
+        "21~40": 50,
+        "41~80": 50,
+        "81+": 50
+      },
+      "musinsa": {
+        "1~5": 2,
+        "6~10": 4,
+        "11~20": 50,
+        "21~40": 50,
+        "41~80": 50,
+        "81+": 50
+      },
+      "naver": {
+        "1~5": 0,
+        "6~10": 18,
+        "11~20": 50,
+        "21~40": 50,
+        "41~80": 50,
+        "81+": 50
+      },
+      "ohouse": {
+        "1~5": 0,
+        "6~10": 0,
+        "11~20": 1,
+        "21~40": 39,
+        "41~80": 50,
+        "81+": 50
+      },
+      "oliveyoung": {
+        "1~5": 0,
+        "6~10": 0,
+        "11~20": 7,
+        "21~40": 50,
+        "41~80": 50,
+        "81+": 50
+      }
+    },
+    "inference_elapsed_seconds": 159.25138070061803,
+    "unavailable_details": []
+  },
+  "statistics": {
+    "overall_by_bucket": {
+      "1~5": {
+        "inferred_sample_count": 77,
+        "available_count": 77,
+        "text_score": {
+          "mean": 93.68831168831169,
+          "median": 94.0,
+          "min": 75.0,
+          "max": 95.0
+        },
+        "suspicious_probability": {
+          "mean": 0.0056321469026726564,
+          "median": 0.003401873866096139
+        },
+        "text_score_gte_90": {
+          "count": 75,
+          "ratio": 0.974025974025974
+        },
+        "text_score_gte_95": {
+          "count": 34,
+          "ratio": 0.44155844155844154
+        },
+        "predicted_label": {
+          "NORMAL": {
+            "count": 77,
+            "ratio": 1.0
+          },
+          "SUSPICIOUS": {
+            "count": 0,
+            "ratio": 0.0
+          }
+        },
+        "unavailable": {
+          "count": 0,
+          "ratio": 0.0
+        }
+      },
+      "6~10": {
+        "inferred_sample_count": 122,
+        "available_count": 122,
+        "text_score": {
+          "mean": 94.82786885245902,
+          "median": 95.0,
+          "min": 92.0,
+          "max": 95.0
+        },
+        "suspicious_probability": {
+          "mean": 0.0029826088270294617,
+          "median": 0.0027356299106031656
+        },
+        "text_score_gte_90": {
+          "count": 122,
+          "ratio": 1.0
+        },
+        "text_score_gte_95": {
+          "count": 107,
+          "ratio": 0.8770491803278688
+        },
+        "predicted_label": {
+          "NORMAL": {
+            "count": 122,
+            "ratio": 1.0
+          },
+          "SUSPICIOUS": {
+            "count": 0,
+            "ratio": 0.0
+          }
+        },
+        "unavailable": {
+          "count": 0,
+          "ratio": 0.0
+        }
+      },
+      "11~20": {
+        "inferred_sample_count": 208,
+        "available_count": 208,
+        "text_score": {
+          "mean": 94.8701923076923,
+          "median": 95.0,
+          "min": 91.0,
+          "max": 95.0
+        },
+        "suspicious_probability": {
+          "mean": 0.002743892117555683,
+          "median": 0.0024902374716475606
+        },
+        "text_score_gte_90": {
+          "count": 208,
+          "ratio": 1.0
+        },
+        "text_score_gte_95": {
+          "count": 197,
+          "ratio": 0.9471153846153846
+        },
+        "predicted_label": {
+          "NORMAL": {
+            "count": 208,
+            "ratio": 1.0
+          },
+          "SUSPICIOUS": {
+            "count": 0,
+            "ratio": 0.0
+          }
+        },
+        "unavailable": {
+          "count": 0,
+          "ratio": 0.0
+        }
+      },
+      "21~40": {
+        "inferred_sample_count": 289,
+        "available_count": 289,
+        "text_score": {
+          "mean": 95.25259515570934,
+          "median": 95.0,
+          "min": 95.0,
+          "max": 96.0
+        },
+        "suspicious_probability": {
+          "mean": 0.002297878339499957,
+          "median": 0.002265137853100896
+        },
+        "text_score_gte_90": {
+          "count": 289,
+          "ratio": 1.0
+        },
+        "text_score_gte_95": {
+          "count": 289,
+          "ratio": 1.0
+        },
+        "predicted_label": {
+          "NORMAL": {
+            "count": 289,
+            "ratio": 1.0
+          },
+          "SUSPICIOUS": {
+            "count": 0,
+            "ratio": 0.0
+          }
+        },
+        "unavailable": {
+          "count": 0,
+          "ratio": 0.0
+        }
+      },
+      "41~80": {
+        "inferred_sample_count": 300,
+        "available_count": 300,
+        "text_score": {
+          "mean": 95.75,
+          "median": 96.0,
+          "min": 95.0,
+          "max": 96.0
+        },
+        "suspicious_probability": {
+          "mean": 0.002198928172389666,
+          "median": 0.0021839237306267023
+        },
+        "text_score_gte_90": {
+          "count": 300,
+          "ratio": 1.0
+        },
+        "text_score_gte_95": {
+          "count": 300,
+          "ratio": 1.0
+        },
+        "predicted_label": {
+          "NORMAL": {
+            "count": 300,
+            "ratio": 1.0
+          },
+          "SUSPICIOUS": {
+            "count": 0,
+            "ratio": 0.0
+          }
+        },
+        "unavailable": {
+          "count": 0,
+          "ratio": 0.0
+        }
+      },
+      "81+": {
+        "inferred_sample_count": 300,
+        "available_count": 300,
+        "text_score": {
+          "mean": 95.73,
+          "median": 96.0,
+          "min": 92.0,
+          "max": 96.0
+        },
+        "suspicious_probability": {
+          "mean": 0.002221709481285264,
+          "median": 0.002179540111683309
+        },
+        "text_score_gte_90": {
+          "count": 300,
+          "ratio": 1.0
+        },
+        "text_score_gte_95": {
+          "count": 299,
+          "ratio": 0.9966666666666667
+        },
+        "predicted_label": {
+          "NORMAL": {
+            "count": 300,
+            "ratio": 1.0
+          },
+          "SUSPICIOUS": {
+            "count": 0,
+            "ratio": 0.0
+          }
+        },
+        "unavailable": {
+          "count": 0,
+          "ratio": 0.0
+        }
+      }
+    },
+    "by_platform_and_bucket": {
+      "elevenst": {
+        "1~5": {
+          "inferred_sample_count": 50,
+          "available_count": 50,
+          "text_score": {
+            "mean": 94.02,
+            "median": 94.0,
+            "min": 90.0,
+            "max": 95.0
+          },
+          "suspicious_probability": {
+            "mean": 0.004257527473382652,
+            "median": 0.0033970517106354237
+          },
+          "text_score_gte_90": {
+            "count": 50,
+            "ratio": 1.0
+          },
+          "text_score_gte_95": {
+            "count": 23,
+            "ratio": 0.46
+          },
+          "predicted_label": {
+            "NORMAL": {
+              "count": 50,
+              "ratio": 1.0
+            },
+            "SUSPICIOUS": {
+              "count": 0,
+              "ratio": 0.0
+            }
+          },
+          "unavailable": {
+            "count": 0,
+            "ratio": 0.0
+          }
+        },
+        "6~10": {
+          "inferred_sample_count": 50,
+          "available_count": 50,
+          "text_score": {
+            "mean": 94.94,
+            "median": 95.0,
+            "min": 94.0,
+            "max": 95.0
+          },
+          "suspicious_probability": {
+            "mean": 0.002826632563956082,
+            "median": 0.002747648279182613
+          },
+          "text_score_gte_90": {
+            "count": 50,
+            "ratio": 1.0
+          },
+          "text_score_gte_95": {
+            "count": 47,
+            "ratio": 0.94
+          },
+          "predicted_label": {
+            "NORMAL": {
+              "count": 50,
+              "ratio": 1.0
+            },
+            "SUSPICIOUS": {
+              "count": 0,
+              "ratio": 0.0
+            }
+          },
+          "unavailable": {
+            "count": 0,
+            "ratio": 0.0
+          }
+        },
+        "11~20": {
+          "inferred_sample_count": 50,
+          "available_count": 50,
+          "text_score": {
+            "mean": 95.0,
+            "median": 95.0,
+            "min": 95.0,
+            "max": 95.0
+          },
+          "suspicious_probability": {
+            "mean": 0.00258502306882292,
+            "median": 0.0024948231875896454
+          },
+          "text_score_gte_90": {
+            "count": 50,
+            "ratio": 1.0
+          },
+          "text_score_gte_95": {
+            "count": 50,
+            "ratio": 1.0
+          },
+          "predicted_label": {
+            "NORMAL": {
+              "count": 50,
+              "ratio": 1.0
+            },
+            "SUSPICIOUS": {
+              "count": 0,
+              "ratio": 0.0
+            }
+          },
+          "unavailable": {
+            "count": 0,
+            "ratio": 0.0
+          }
+        },
+        "21~40": {
+          "inferred_sample_count": 50,
+          "available_count": 50,
+          "text_score": {
+            "mean": 95.26,
+            "median": 95.0,
+            "min": 95.0,
+            "max": 96.0
+          },
+          "suspicious_probability": {
+            "mean": 0.002286098999902606,
+            "median": 0.0022525492822751403
+          },
+          "text_score_gte_90": {
+            "count": 50,
+            "ratio": 1.0
+          },
+          "text_score_gte_95": {
+            "count": 50,
+            "ratio": 1.0
+          },
+          "predicted_label": {
+            "NORMAL": {
+              "count": 50,
+              "ratio": 1.0
+            },
+            "SUSPICIOUS": {
+              "count": 0,
+              "ratio": 0.0
+            }
+          },
+          "unavailable": {
+            "count": 0,
+            "ratio": 0.0
+          }
+        },
+        "41~80": {
+          "inferred_sample_count": 50,
+          "available_count": 50,
+          "text_score": {
+            "mean": 95.8,
+            "median": 96.0,
+            "min": 95.0,
+            "max": 96.0
+          },
+          "suspicious_probability": {
+            "mean": 0.0021988987643271683,
+            "median": 0.002180842566303909
+          },
+          "text_score_gte_90": {
+            "count": 50,
+            "ratio": 1.0
+          },
+          "text_score_gte_95": {
+            "count": 50,
+            "ratio": 1.0
+          },
+          "predicted_label": {
+            "NORMAL": {
+              "count": 50,
+              "ratio": 1.0
+            },
+            "SUSPICIOUS": {
+              "count": 0,
+              "ratio": 0.0
+            }
+          },
+          "unavailable": {
+            "count": 0,
+            "ratio": 0.0
+          }
+        },
+        "81+": {
+          "inferred_sample_count": 50,
+          "available_count": 50,
+          "text_score": {
+            "mean": 95.7,
+            "median": 96.0,
+            "min": 92.0,
+            "max": 96.0
+          },
+          "suspicious_probability": {
+            "mean": 0.002293801223859191,
+            "median": 0.0021814057836309075
+          },
+          "text_score_gte_90": {
+            "count": 50,
+            "ratio": 1.0
+          },
+          "text_score_gte_95": {
+            "count": 49,
+            "ratio": 0.98
+          },
+          "predicted_label": {
+            "NORMAL": {
+              "count": 50,
+              "ratio": 1.0
+            },
+            "SUSPICIOUS": {
+              "count": 0,
+              "ratio": 0.0
+            }
+          },
+          "unavailable": {
+            "count": 0,
+            "ratio": 0.0
+          }
+        }
+      },
+      "kurly": {
+        "1~5": {
+          "inferred_sample_count": 25,
+          "available_count": 25,
+          "text_score": {
+            "mean": 93.0,
+            "median": 94.0,
+            "min": 75.0,
+            "max": 95.0
+          },
+          "suspicious_probability": {
+            "mean": 0.008548404425382614,
+            "median": 0.003647539298981428
+          },
+          "text_score_gte_90": {
+            "count": 23,
+            "ratio": 0.92
+          },
+          "text_score_gte_95": {
+            "count": 11,
+            "ratio": 0.44
+          },
+          "predicted_label": {
+            "NORMAL": {
+              "count": 25,
+              "ratio": 1.0
+            },
+            "SUSPICIOUS": {
+              "count": 0,
+              "ratio": 0.0
+            }
+          },
+          "unavailable": {
+            "count": 0,
+            "ratio": 0.0
+          }
+        },
+        "6~10": {
+          "inferred_sample_count": 50,
+          "available_count": 50,
+          "text_score": {
+            "mean": 94.78,
+            "median": 95.0,
+            "min": 92.0,
+            "max": 95.0
+          },
+          "suspicious_probability": {
+            "mean": 0.003077042358927429,
+            "median": 0.0027750900480896235
+          },
+          "text_score_gte_90": {
+            "count": 50,
+            "ratio": 1.0
+          },
+          "text_score_gte_95": {
+            "count": 43,
+            "ratio": 0.86
+          },
+          "predicted_label": {
+            "NORMAL": {
+              "count": 50,
+              "ratio": 1.0
+            },
+            "SUSPICIOUS": {
+              "count": 0,
+              "ratio": 0.0
+            }
+          },
+          "unavailable": {
+            "count": 0,
+            "ratio": 0.0
+          }
+        },
+        "11~20": {
+          "inferred_sample_count": 50,
+          "available_count": 50,
+          "text_score": {
+            "mean": 95.0,
+            "median": 95.0,
+            "min": 95.0,
+            "max": 95.0
+          },
+          "suspicious_probability": {
+            "mean": 0.0025410971650853755,
+            "median": 0.0024794345954433084
+          },
+          "text_score_gte_90": {
+            "count": 50,
+            "ratio": 1.0
+          },
+          "text_score_gte_95": {
+            "count": 50,
+            "ratio": 1.0
+          },
+          "predicted_label": {
+            "NORMAL": {
+              "count": 50,
+              "ratio": 1.0
+            },
+            "SUSPICIOUS": {
+              "count": 0,
+              "ratio": 0.0
+            }
+          },
+          "unavailable": {
+            "count": 0,
+            "ratio": 0.0
+          }
+        },
+        "21~40": {
+          "inferred_sample_count": 50,
+          "available_count": 50,
+          "text_score": {
+            "mean": 95.18,
+            "median": 95.0,
+            "min": 95.0,
+            "max": 96.0
+          },
+          "suspicious_probability": {
+            "mean": 0.0023579801386222243,
+            "median": 0.002294338191859424
+          },
+          "text_score_gte_90": {
+            "count": 50,
+            "ratio": 1.0
+          },
+          "text_score_gte_95": {
+            "count": 50,
+            "ratio": 1.0
+          },
+          "predicted_label": {
+            "NORMAL": {
+              "count": 50,
+              "ratio": 1.0
+            },
+            "SUSPICIOUS": {
+              "count": 0,
+              "ratio": 0.0
+            }
+          },
+          "unavailable": {
+            "count": 0,
+            "ratio": 0.0
+          }
+        },
+        "41~80": {
+          "inferred_sample_count": 50,
+          "available_count": 50,
+          "text_score": {
+            "mean": 95.62,
+            "median": 96.0,
+            "min": 95.0,
+            "max": 96.0
+          },
+          "suspicious_probability": {
+            "mean": 0.0022082357900217175,
+            "median": 0.002202630857937038
+          },
+          "text_score_gte_90": {
+            "count": 50,
+            "ratio": 1.0
+          },
+          "text_score_gte_95": {
+            "count": 50,
+            "ratio": 1.0
+          },
+          "predicted_label": {
+            "NORMAL": {
+              "count": 50,
+              "ratio": 1.0
+            },
+            "SUSPICIOUS": {
+              "count": 0,
+              "ratio": 0.0
+            }
+          },
+          "unavailable": {
+            "count": 0,
+            "ratio": 0.0
+          }
+        },
+        "81+": {
+          "inferred_sample_count": 50,
+          "available_count": 50,
+          "text_score": {
+            "mean": 95.7,
+            "median": 96.0,
+            "min": 95.0,
+            "max": 96.0
+          },
+          "suspicious_probability": {
+            "mean": 0.0022374625038355587,
+            "median": 0.002183498698286712
+          },
+          "text_score_gte_90": {
+            "count": 50,
+            "ratio": 1.0
+          },
+          "text_score_gte_95": {
+            "count": 50,
+            "ratio": 1.0
+          },
+          "predicted_label": {
+            "NORMAL": {
+              "count": 50,
+              "ratio": 1.0
+            },
+            "SUSPICIOUS": {
+              "count": 0,
+              "ratio": 0.0
+            }
+          },
+          "unavailable": {
+            "count": 0,
+            "ratio": 0.0
+          }
+        }
+      },
+      "musinsa": {
+        "1~5": {
+          "inferred_sample_count": 2,
+          "available_count": 2,
+          "text_score": {
+            "mean": 94.0,
+            "median": 94.0,
+            "min": 94.0,
+            "max": 94.0
+          },
+          "suspicious_probability": {
+            "mean": 0.0035444136010482907,
+            "median": 0.0035444136010482907
+          },
+          "text_score_gte_90": {
+            "count": 2,
+            "ratio": 1.0
+          },
+          "text_score_gte_95": {
+            "count": 0,
+            "ratio": 0.0
+          },
+          "predicted_label": {
+            "NORMAL": {
+              "count": 2,
+              "ratio": 1.0
+            },
+            "SUSPICIOUS": {
+              "count": 0,
+              "ratio": 0.0
+            }
+          },
+          "unavailable": {
+            "count": 0,
+            "ratio": 0.0
+          }
+        },
+        "6~10": {
+          "inferred_sample_count": 4,
+          "available_count": 4,
+          "text_score": {
+            "mean": 93.75,
+            "median": 93.5,
+            "min": 93.0,
+            "max": 95.0
+          },
+          "suspicious_probability": {
+            "mean": 0.00433152390178293,
+            "median": 0.004608637187629938
+          },
+          "text_score_gte_90": {
+            "count": 4,
+            "ratio": 1.0
+          },
+          "text_score_gte_95": {
+            "count": 1,
+            "ratio": 0.25
+          },
+          "predicted_label": {
+            "NORMAL": {
+              "count": 4,
+              "ratio": 1.0
+            },
+            "SUSPICIOUS": {
+              "count": 0,
+              "ratio": 0.0
+            }
+          },
+          "unavailable": {
+            "count": 0,
+            "ratio": 0.0
+          }
+        },
+        "11~20": {
+          "inferred_sample_count": 50,
+          "available_count": 50,
+          "text_score": {
+            "mean": 94.7,
+            "median": 95.0,
+            "min": 91.0,
+            "max": 95.0
+          },
+          "suspicious_probability": {
+            "mean": 0.0029554563388228417,
+            "median": 0.0024300580844283104
+          },
+          "text_score_gte_90": {
+            "count": 50,
+            "ratio": 1.0
+          },
+          "text_score_gte_95": {
+            "count": 43,
+            "ratio": 0.86
+          },
+          "predicted_label": {
+            "NORMAL": {
+              "count": 50,
+              "ratio": 1.0
+            },
+            "SUSPICIOUS": {
+              "count": 0,
+              "ratio": 0.0
+            }
+          },
+          "unavailable": {
+            "count": 0,
+            "ratio": 0.0
+          }
+        },
+        "21~40": {
+          "inferred_sample_count": 50,
+          "available_count": 50,
+          "text_score": {
+            "mean": 95.24,
+            "median": 95.0,
+            "min": 95.0,
+            "max": 96.0
+          },
+          "suspicious_probability": {
+            "mean": 0.0023138409154489638,
+            "median": 0.0022706773597747087
+          },
+          "text_score_gte_90": {
+            "count": 50,
+            "ratio": 1.0
+          },
+          "text_score_gte_95": {
+            "count": 50,
+            "ratio": 1.0
+          },
+          "predicted_label": {
+            "NORMAL": {
+              "count": 50,
+              "ratio": 1.0
+            },
+            "SUSPICIOUS": {
+              "count": 0,
+              "ratio": 0.0
+            }
+          },
+          "unavailable": {
+            "count": 0,
+            "ratio": 0.0
+          }
+        },
+        "41~80": {
+          "inferred_sample_count": 50,
+          "available_count": 50,
+          "text_score": {
+            "mean": 95.76,
+            "median": 96.0,
+            "min": 95.0,
+            "max": 96.0
+          },
+          "suspicious_probability": {
+            "mean": 0.0021964940847828984,
+            "median": 0.002181511139497161
+          },
+          "text_score_gte_90": {
+            "count": 50,
+            "ratio": 1.0
+          },
+          "text_score_gte_95": {
+            "count": 50,
+            "ratio": 1.0
+          },
+          "predicted_label": {
+            "NORMAL": {
+              "count": 50,
+              "ratio": 1.0
+            },
+            "SUSPICIOUS": {
+              "count": 0,
+              "ratio": 0.0
+            }
+          },
+          "unavailable": {
+            "count": 0,
+            "ratio": 0.0
+          }
+        },
+        "81+": {
+          "inferred_sample_count": 50,
+          "available_count": 50,
+          "text_score": {
+            "mean": 95.74,
+            "median": 96.0,
+            "min": 95.0,
+            "max": 96.0
+          },
+          "suspicious_probability": {
+            "mean": 0.002200486650690436,
+            "median": 0.0021681757643818855
+          },
+          "text_score_gte_90": {
+            "count": 50,
+            "ratio": 1.0
+          },
+          "text_score_gte_95": {
+            "count": 50,
+            "ratio": 1.0
+          },
+          "predicted_label": {
+            "NORMAL": {
+              "count": 50,
+              "ratio": 1.0
+            },
+            "SUSPICIOUS": {
+              "count": 0,
+              "ratio": 0.0
+            }
+          },
+          "unavailable": {
+            "count": 0,
+            "ratio": 0.0
+          }
+        }
+      },
+      "naver": {
+        "1~5": {
+          "inferred_sample_count": 0,
+          "available_count": 0,
+          "text_score": {
+            "mean": null,
+            "median": null,
+            "min": null,
+            "max": null
+          },
+          "suspicious_probability": {
+            "mean": null,
+            "median": null
+          },
+          "text_score_gte_90": {
+            "count": 0,
+            "ratio": 0.0
+          },
+          "text_score_gte_95": {
+            "count": 0,
+            "ratio": 0.0
+          },
+          "predicted_label": {
+            "NORMAL": {
+              "count": 0,
+              "ratio": 0.0
+            },
+            "SUSPICIOUS": {
+              "count": 0,
+              "ratio": 0.0
+            }
+          },
+          "unavailable": {
+            "count": 0,
+            "ratio": 0.0
+          }
+        },
+        "6~10": {
+          "inferred_sample_count": 18,
+          "available_count": 18,
+          "text_score": {
+            "mean": 94.88888888888889,
+            "median": 95.0,
+            "min": 94.0,
+            "max": 95.0
+          },
+          "suspicious_probability": {
+            "mean": 0.0028538019525715047,
+            "median": 0.002655591699294746
+          },
+          "text_score_gte_90": {
+            "count": 18,
+            "ratio": 1.0
+          },
+          "text_score_gte_95": {
+            "count": 16,
+            "ratio": 0.8888888888888888
+          },
+          "predicted_label": {
+            "NORMAL": {
+              "count": 18,
+              "ratio": 1.0
+            },
+            "SUSPICIOUS": {
+              "count": 0,
+              "ratio": 0.0
+            }
+          },
+          "unavailable": {
+            "count": 0,
+            "ratio": 0.0
+          }
+        },
+        "11~20": {
+          "inferred_sample_count": 50,
+          "available_count": 50,
+          "text_score": {
+            "mean": 95.0,
+            "median": 95.0,
+            "min": 95.0,
+            "max": 95.0
+          },
+          "suspicious_probability": {
+            "mean": 0.0025577490590512754,
+            "median": 0.0025084841763600707
+          },
+          "text_score_gte_90": {
+            "count": 50,
+            "ratio": 1.0
+          },
+          "text_score_gte_95": {
+            "count": 50,
+            "ratio": 1.0
+          },
+          "predicted_label": {
+            "NORMAL": {
+              "count": 50,
+              "ratio": 1.0
+            },
+            "SUSPICIOUS": {
+              "count": 0,
+              "ratio": 0.0
+            }
+          },
+          "unavailable": {
+            "count": 0,
+            "ratio": 0.0
+          }
+        },
+        "21~40": {
+          "inferred_sample_count": 50,
+          "available_count": 50,
+          "text_score": {
+            "mean": 95.2,
+            "median": 95.0,
+            "min": 95.0,
+            "max": 96.0
+          },
+          "suspicious_probability": {
+            "mean": 0.0022902575135231016,
+            "median": 0.002270553959533572
+          },
+          "text_score_gte_90": {
+            "count": 50,
+            "ratio": 1.0
+          },
+          "text_score_gte_95": {
+            "count": 50,
+            "ratio": 1.0
+          },
+          "predicted_label": {
+            "NORMAL": {
+              "count": 50,
+              "ratio": 1.0
+            },
+            "SUSPICIOUS": {
+              "count": 0,
+              "ratio": 0.0
+            }
+          },
+          "unavailable": {
+            "count": 0,
+            "ratio": 0.0
+          }
+        },
+        "41~80": {
+          "inferred_sample_count": 50,
+          "available_count": 50,
+          "text_score": {
+            "mean": 95.82,
+            "median": 96.0,
+            "min": 95.0,
+            "max": 96.0
+          },
+          "suspicious_probability": {
+            "mean": 0.0021910259127616884,
+            "median": 0.0021782367257401347
+          },
+          "text_score_gte_90": {
+            "count": 50,
+            "ratio": 1.0
+          },
+          "text_score_gte_95": {
+            "count": 50,
+            "ratio": 1.0
+          },
+          "predicted_label": {
+            "NORMAL": {
+              "count": 50,
+              "ratio": 1.0
+            },
+            "SUSPICIOUS": {
+              "count": 0,
+              "ratio": 0.0
+            }
+          },
+          "unavailable": {
+            "count": 0,
+            "ratio": 0.0
+          }
+        },
+        "81+": {
+          "inferred_sample_count": 50,
+          "available_count": 50,
+          "text_score": {
+            "mean": 95.68,
+            "median": 96.0,
+            "min": 95.0,
+            "max": 96.0
+          },
+          "suspicious_probability": {
+            "mean": 0.0022050919430330394,
+            "median": 0.0021845579613000154
+          },
+          "text_score_gte_90": {
+            "count": 50,
+            "ratio": 1.0
+          },
+          "text_score_gte_95": {
+            "count": 50,
+            "ratio": 1.0
+          },
+          "predicted_label": {
+            "NORMAL": {
+              "count": 50,
+              "ratio": 1.0
+            },
+            "SUSPICIOUS": {
+              "count": 0,
+              "ratio": 0.0
+            }
+          },
+          "unavailable": {
+            "count": 0,
+            "ratio": 0.0
+          }
+        }
+      },
+      "ohouse": {
+        "1~5": {
+          "inferred_sample_count": 0,
+          "available_count": 0,
+          "text_score": {
+            "mean": null,
+            "median": null,
+            "min": null,
+            "max": null
+          },
+          "suspicious_probability": {
+            "mean": null,
+            "median": null
+          },
+          "text_score_gte_90": {
+            "count": 0,
+            "ratio": 0.0
+          },
+          "text_score_gte_95": {
+            "count": 0,
+            "ratio": 0.0
+          },
+          "predicted_label": {
+            "NORMAL": {
+              "count": 0,
+              "ratio": 0.0
+            },
+            "SUSPICIOUS": {
+              "count": 0,
+              "ratio": 0.0
+            }
+          },
+          "unavailable": {
+            "count": 0,
+            "ratio": 0.0
+          }
+        },
+        "6~10": {
+          "inferred_sample_count": 0,
+          "available_count": 0,
+          "text_score": {
+            "mean": null,
+            "median": null,
+            "min": null,
+            "max": null
+          },
+          "suspicious_probability": {
+            "mean": null,
+            "median": null
+          },
+          "text_score_gte_90": {
+            "count": 0,
+            "ratio": 0.0
+          },
+          "text_score_gte_95": {
+            "count": 0,
+            "ratio": 0.0
+          },
+          "predicted_label": {
+            "NORMAL": {
+              "count": 0,
+              "ratio": 0.0
+            },
+            "SUSPICIOUS": {
+              "count": 0,
+              "ratio": 0.0
+            }
+          },
+          "unavailable": {
+            "count": 0,
+            "ratio": 0.0
+          }
+        },
+        "11~20": {
+          "inferred_sample_count": 1,
+          "available_count": 1,
+          "text_score": {
+            "mean": 95.0,
+            "median": 95.0,
+            "min": 95.0,
+            "max": 95.0
+          },
+          "suspicious_probability": {
+            "mean": 0.002369195455685258,
+            "median": 0.002369195455685258
+          },
+          "text_score_gte_90": {
+            "count": 1,
+            "ratio": 1.0
+          },
+          "text_score_gte_95": {
+            "count": 1,
+            "ratio": 1.0
+          },
+          "predicted_label": {
+            "NORMAL": {
+              "count": 1,
+              "ratio": 1.0
+            },
+            "SUSPICIOUS": {
+              "count": 0,
+              "ratio": 0.0
+            }
+          },
+          "unavailable": {
+            "count": 0,
+            "ratio": 0.0
+          }
+        },
+        "21~40": {
+          "inferred_sample_count": 39,
+          "available_count": 39,
+          "text_score": {
+            "mean": 95.3076923076923,
+            "median": 95.0,
+            "min": 95.0,
+            "max": 96.0
+          },
+          "suspicious_probability": {
+            "mean": 0.002268452412233903,
+            "median": 0.0022593054454773664
+          },
+          "text_score_gte_90": {
+            "count": 39,
+            "ratio": 1.0
+          },
+          "text_score_gte_95": {
+            "count": 39,
+            "ratio": 1.0
+          },
+          "predicted_label": {
+            "NORMAL": {
+              "count": 39,
+              "ratio": 1.0
+            },
+            "SUSPICIOUS": {
+              "count": 0,
+              "ratio": 0.0
+            }
+          },
+          "unavailable": {
+            "count": 0,
+            "ratio": 0.0
+          }
+        },
+        "41~80": {
+          "inferred_sample_count": 50,
+          "available_count": 50,
+          "text_score": {
+            "mean": 95.86,
+            "median": 96.0,
+            "min": 95.0,
+            "max": 96.0
+          },
+          "suspicious_probability": {
+            "mean": 0.002187699633650482,
+            "median": 0.002170665771700442
+          },
+          "text_score_gte_90": {
+            "count": 50,
+            "ratio": 1.0
+          },
+          "text_score_gte_95": {
+            "count": 50,
+            "ratio": 1.0
+          },
+          "predicted_label": {
+            "NORMAL": {
+              "count": 50,
+              "ratio": 1.0
+            },
+            "SUSPICIOUS": {
+              "count": 0,
+              "ratio": 0.0
+            }
+          },
+          "unavailable": {
+            "count": 0,
+            "ratio": 0.0
+          }
+        },
+        "81+": {
+          "inferred_sample_count": 50,
+          "available_count": 50,
+          "text_score": {
+            "mean": 95.9,
+            "median": 96.0,
+            "min": 95.0,
+            "max": 96.0
+          },
+          "suspicious_probability": {
+            "mean": 0.0021798218693584205,
+            "median": 0.002160782925784588
+          },
+          "text_score_gte_90": {
+            "count": 50,
+            "ratio": 1.0
+          },
+          "text_score_gte_95": {
+            "count": 50,
+            "ratio": 1.0
+          },
+          "predicted_label": {
+            "NORMAL": {
+              "count": 50,
+              "ratio": 1.0
+            },
+            "SUSPICIOUS": {
+              "count": 0,
+              "ratio": 0.0
+            }
+          },
+          "unavailable": {
+            "count": 0,
+            "ratio": 0.0
+          }
+        }
+      },
+      "oliveyoung": {
+        "1~5": {
+          "inferred_sample_count": 0,
+          "available_count": 0,
+          "text_score": {
+            "mean": null,
+            "median": null,
+            "min": null,
+            "max": null
+          },
+          "suspicious_probability": {
+            "mean": null,
+            "median": null
+          },
+          "text_score_gte_90": {
+            "count": 0,
+            "ratio": 0.0
+          },
+          "text_score_gte_95": {
+            "count": 0,
+            "ratio": 0.0
+          },
+          "predicted_label": {
+            "NORMAL": {
+              "count": 0,
+              "ratio": 0.0
+            },
+            "SUSPICIOUS": {
+              "count": 0,
+              "ratio": 0.0
+            }
+          },
+          "unavailable": {
+            "count": 0,
+            "ratio": 0.0
+          }
+        },
+        "6~10": {
+          "inferred_sample_count": 0,
+          "available_count": 0,
+          "text_score": {
+            "mean": null,
+            "median": null,
+            "min": null,
+            "max": null
+          },
+          "suspicious_probability": {
+            "mean": null,
+            "median": null
+          },
+          "text_score_gte_90": {
+            "count": 0,
+            "ratio": 0.0
+          },
+          "text_score_gte_95": {
+            "count": 0,
+            "ratio": 0.0
+          },
+          "predicted_label": {
+            "NORMAL": {
+              "count": 0,
+              "ratio": 0.0
+            },
+            "SUSPICIOUS": {
+              "count": 0,
+              "ratio": 0.0
+            }
+          },
+          "unavailable": {
+            "count": 0,
+            "ratio": 0.0
+          }
+        },
+        "11~20": {
+          "inferred_sample_count": 7,
+          "available_count": 7,
+          "text_score": {
+            "mean": 93.28571428571429,
+            "median": 92.0,
+            "min": 92.0,
+            "max": 95.0
+          },
+          "suspicious_probability": {
+            "mean": 0.005199154772396598,
+            "median": 0.007122238166630268
+          },
+          "text_score_gte_90": {
+            "count": 7,
+            "ratio": 1.0
+          },
+          "text_score_gte_95": {
+            "count": 3,
+            "ratio": 0.42857142857142855
+          },
+          "predicted_label": {
+            "NORMAL": {
+              "count": 7,
+              "ratio": 1.0
+            },
+            "SUSPICIOUS": {
+              "count": 0,
+              "ratio": 0.0
+            }
+          },
+          "unavailable": {
+            "count": 0,
+            "ratio": 0.0
+          }
+        },
+        "21~40": {
+          "inferred_sample_count": 50,
+          "available_count": 50,
+          "text_score": {
+            "mean": 95.34,
+            "median": 95.0,
+            "min": 95.0,
+            "max": 96.0
+          },
+          "suspicious_probability": {
+            "mean": 0.0022641663532704114,
+            "median": 0.0022453045239672065
+          },
+          "text_score_gte_90": {
+            "count": 50,
+            "ratio": 1.0
+          },
+          "text_score_gte_95": {
+            "count": 50,
+            "ratio": 1.0
+          },
+          "predicted_label": {
+            "NORMAL": {
+              "count": 50,
+              "ratio": 1.0
+            },
+            "SUSPICIOUS": {
+              "count": 0,
+              "ratio": 0.0
+            }
+          },
+          "unavailable": {
+            "count": 0,
+            "ratio": 0.0
+          }
+        },
+        "41~80": {
+          "inferred_sample_count": 50,
+          "available_count": 50,
+          "text_score": {
+            "mean": 95.64,
+            "median": 96.0,
+            "min": 95.0,
+            "max": 96.0
+          },
+          "suspicious_probability": {
+            "mean": 0.0022112148487940433,
+            "median": 0.0021952864481136203
+          },
+          "text_score_gte_90": {
+            "count": 50,
+            "ratio": 1.0
+          },
+          "text_score_gte_95": {
+            "count": 50,
+            "ratio": 1.0
+          },
+          "predicted_label": {
+            "NORMAL": {
+              "count": 50,
+              "ratio": 1.0
+            },
+            "SUSPICIOUS": {
+              "count": 0,
+              "ratio": 0.0
+            }
+          },
+          "unavailable": {
+            "count": 0,
+            "ratio": 0.0
+          }
+        },
+        "81+": {
+          "inferred_sample_count": 50,
+          "available_count": 50,
+          "text_score": {
+            "mean": 95.66,
+            "median": 96.0,
+            "min": 95.0,
+            "max": 96.0
+          },
+          "suspicious_probability": {
+            "mean": 0.0022135926969349385,
+            "median": 0.002197490888647735
+          },
+          "text_score_gte_90": {
+            "count": 50,
+            "ratio": 1.0
+          },
+          "text_score_gte_95": {
+            "count": 50,
+            "ratio": 1.0
+          },
+          "predicted_label": {
+            "NORMAL": {
+              "count": 50,
+              "ratio": 1.0
+            },
+            "SUSPICIOUS": {
+              "count": 0,
+              "ratio": 0.0
+            }
+          },
+          "unavailable": {
+            "count": 0,
+            "ratio": 0.0
+          }
+        }
+      }
+    },
+    "short_1_to_20": {
+      "inferred_sample_count": 407,
+      "available_count": 407,
+      "text_score": {
+        "mean": 94.63390663390663,
+        "median": 95.0,
+        "min": 75.0,
+        "max": 95.0
+      },
+      "suspicious_probability": {
+        "mean": 0.003361875058611722,
+        "median": 0.0026736571453511715
+      },
+      "text_score_gte_90": {
+        "count": 405,
+        "ratio": 0.995085995085995
+      },
+      "text_score_gte_95": {
+        "count": 338,
+        "ratio": 0.8304668304668305
+      },
+      "predicted_label": {
+        "NORMAL": {
+          "count": 407,
+          "ratio": 1.0
+        },
+        "SUSPICIOUS": {
+          "count": 0,
+          "ratio": 0.0
+        }
+      },
+      "unavailable": {
+        "count": 0,
+        "ratio": 0.0
+      }
+    },
+    "longer_41_plus": {
+      "inferred_sample_count": 600,
+      "available_count": 600,
+      "text_score": {
+        "mean": 95.74,
+        "median": 96.0,
+        "min": 92.0,
+        "max": 96.0
+      },
+      "suspicious_probability": {
+        "mean": 0.002210318826837465,
+        "median": 0.00218194758053869
+      },
+      "text_score_gte_90": {
+        "count": 600,
+        "ratio": 1.0
+      },
+      "text_score_gte_95": {
+        "count": 599,
+        "ratio": 0.9983333333333333
+      },
+      "predicted_label": {
+        "NORMAL": {
+          "count": 600,
+          "ratio": 1.0
+        },
+        "SUSPICIOUS": {
+          "count": 0,
+          "ratio": 0.0
+        }
+      },
+      "unavailable": {
+        "count": 0,
+        "ratio": 0.0
+      }
+    }
+  },
+  "diagnostic_examples": {
+    "by_bucket": {
+      "1~5": {
+        "highest": {
+          "content": "빨리왔어요",
+          "length": 5,
+          "platform": "elevenst",
+          "length_bucket": "1~5",
+          "text_score": 95,
+          "suspicious_probability": 0.003092325059697032,
+          "predicted_label": "NORMAL"
+        },
+        "lowest": {
+          "content": "커리 합격",
+          "length": 5,
+          "platform": "kurly",
+          "length_bucket": "1~5",
+          "text_score": 75,
+          "suspicious_probability": 0.09836496412754059,
+          "predicted_label": "NORMAL"
+        }
+      },
+      "6~10": {
+        "highest": {
+          "content": "만족합니다 ㅎㅎ!",
+          "length": 9,
+          "platform": "kurly",
+          "length_bucket": "6~10",
+          "text_score": 95,
+          "suspicious_probability": 0.002823146991431713,
+          "predicted_label": "NORMAL"
+        },
+        "lowest": {
+          "content": "냉동실에 보관증",
+          "length": 8,
+          "platform": "kurly",
+          "length_bucket": "6~10",
+          "text_score": 92,
+          "suspicious_probability": 0.007412519305944443,
+          "predicted_label": "NORMAL"
+        }
+      },
+      "11~20": {
+        "highest": {
+          "content": "조아하는 샐러드에요.",
+          "length": 11,
+          "platform": "kurly",
+          "length_bucket": "11~20",
+          "text_score": 95,
+          "suspicious_probability": 0.0025986332911998034,
+          "predicted_label": "NORMAL"
+        },
+        "lowest": {
+          "content": "심플123456789000000000",
+          "length": 20,
+          "platform": "musinsa",
+          "length_bucket": "11~20",
+          "text_score": 91,
+          "suspicious_probability": 0.009833848103880882,
+          "predicted_label": "NORMAL"
+        }
+      },
+      "21~40": {
+        "highest": {
+          "content": "뱃살이 많아서 원하는 핏은 안 나오지만 가볍고 뒤에 주머니 있어서 좋아요",
+          "length": 40,
+          "platform": "musinsa",
+          "length_bucket": "21~40",
+          "text_score": 96,
+          "suspicious_probability": 0.0021563987247645855,
+          "predicted_label": "NORMAL"
+        },
+        "lowest": {
+          "content": "맛있어요 삼삼한게 느끼하지고 않고 좋습미다.",
+          "length": 24,
+          "platform": "kurly",
+          "length_bucket": "21~40",
+          "text_score": 95,
+          "suspicious_probability": 0.0022386005148291588,
+          "predicted_label": "NORMAL"
+        }
+      },
+      "41~80": {
+        "highest": {
+          "content": "꼬깔콘중 이 맛이 제일 맛있어요 자극적이지도않고 고소하고 막 집어먹기 짱이에요",
+          "length": 43,
+          "platform": "kurly",
+          "length_bucket": "41~80",
+          "text_score": 96,
+          "suspicious_probability": 0.00218178634531796,
+          "predicted_label": "NORMAL"
+        },
+        "lowest": {
+          "content": "꾸준히 사용하는 마스크로 마데카소사이드 함량이 다른 제품보다 높으며 피부가 매끈해져요. 무신사가 가장 저렴했어요.",
+          "length": 63,
+          "platform": "musinsa",
+          "length_bucket": "41~80",
+          "text_score": 95,
+          "suspicious_probability": 0.0022750922944396734,
+          "predicted_label": "NORMAL"
+        }
+      },
+      "81+": {
+        "highest": {
+          "content": "남성애게 좋은 영양제라고 해서 아빠 선물하려고 구매했어요 남성건강을 위한 비오틴, 아연이 강화되어 있다고 해요 특히 오메가3와 마그네슘, 비타민B로 구성되어 있어 종합 건강관리에 도움을 줄 수 있어요 개별 포장 되어 있어서 하나씩 가지고 다니며 먹기 좋고 여행용으로 들고 다니기도 좋았어요 액상은 주황색이고 조금 걸쭉해요 같이 포장되어 있는 알약과 먹으면 되고 걸쭉하다보니 물이랑 함께 먹는게 좋을 거 같아요 확실히 영양제 먹을때와 안먹을때 차이는 있는거 같다고 느끼고 선물용으로도 너무 좋은거 같아요",
+          "length": 280,
+          "platform": "oliveyoung",
+          "length_bucket": "81+",
+          "text_score": 96,
+          "suspicious_probability": 0.0021947319619357586,
+          "predicted_label": "NORMAL"
+        },
+        "lowest": {
+          "content": "좋은것같아요좋은것같아요좋은것같아요좋은것같아요좋은것같아요좋은것같아요좋은것같아요좋은것같아요좋은것같아요좋은것같아요좋은것같아요좋은것같아요좋은것같아요좋은것같아요좋은것같아요좋은것같아요좋은것같아요좋은것같아요좋은것같아요좋은것같아요좋은것같아요좋은것같아요좋은것같아요좋은것같아요좋은것같아요좋은것같아요좋은것같아요",
+          "length": 162,
+          "platform": "elevenst",
+          "length_bucket": "81+",
+          "text_score": 92,
+          "suspicious_probability": 0.007122238166630268,
+          "predicted_label": "NORMAL"
+        }
+      }
+    },
+    "short_text_score_gte_90": [
+      {
+        "content": "조아하는 샐러드에요.",
+        "length": 11,
+        "platform": "kurly",
+        "length_bucket": "11~20",
+        "text_score": 95,
+        "suspicious_probability": 0.0025986332911998034,
+        "predicted_label": "NORMAL"
+      },
+      {
+        "content": "생연어회 좋아요 맛있어요",
+        "length": 13,
+        "platform": "kurly",
+        "length_bucket": "11~20",
+        "text_score": 95,
+        "suspicious_probability": 0.0024687955155968666,
+        "predicted_label": "NORMAL"
+      },
+      {
+        "content": "떨어지지 않게 매번 구매합니다",
+        "length": 16,
+        "platform": "kurly",
+        "length_bucket": "11~20",
+        "text_score": 95,
+        "suspicious_probability": 0.0028480335604399443,
+        "predicted_label": "NORMAL"
+      },
+      {
+        "content": "레이어드되어 있어서 더 예쁘네요",
+        "length": 17,
+        "platform": "elevenst",
+        "length_bucket": "11~20",
+        "text_score": 95,
+        "suspicious_probability": 0.002335980301722884,
+        "predicted_label": "NORMAL"
+      },
+      {
+        "content": "늘 주문합니다 좋습니다",
+        "length": 12,
+        "platform": "kurly",
+        "length_bucket": "11~20",
+        "text_score": 95,
+        "suspicious_probability": 0.0026289294473826885,
+        "predicted_label": "NORMAL"
+      }
+    ]
+  },
+  "interpretation": {
+    "classification": "C",
+    "classification_qualifier": "closest, with global saturation caveat",
+    "scope_assessment": {
+      "short_specific_effect": "not_supported",
+      "global_score_saturation": "observed",
+      "ground_truth_generalization_failure": "not_established"
+    },
+    "summary": "C is the closest category because sampled 1~20 character reviews broadly saturate at >=90. However, the 41+ group saturates at least as strongly. Across this unlabeled new-data sample, P_text outputs concentrate globally in the NORMAL direction, mostly around scores 94~96; this does not support a short-specific effect and does not establish ground-truth generalization failure.",
+    "decision_aid": "Diagnostic heuristic: C when every 1~20 bucket has >=70% scores >=90; B when either 1~5 or 6~10 does; otherwise A. This is not a policy threshold.",
+    "evidence": {
+      "bucket_text_score_gte_90_ratios": {
+        "1~5": 0.974025974025974,
+        "6~10": 1.0,
+        "11~20": 1.0,
+        "21~40": 1.0,
+        "41~80": 1.0,
+        "81+": 1.0
+      },
+      "short_minus_longer_text_score_gte_90_ratio": -0.004914004914004955,
+      "short_1_to_20": {
+        "inferred_sample_count": 407,
+        "available_count": 407,
+        "text_score": {
+          "mean": 94.63390663390663,
+          "median": 95.0,
+          "min": 75.0,
+          "max": 95.0
+        },
+        "suspicious_probability": {
+          "mean": 0.003361875058611722,
+          "median": 0.0026736571453511715
+        },
+        "text_score_gte_90": {
+          "count": 405,
+          "ratio": 0.995085995085995
+        },
+        "text_score_gte_95": {
+          "count": 338,
+          "ratio": 0.8304668304668305
+        },
+        "predicted_label": {
+          "NORMAL": {
+            "count": 407,
+            "ratio": 1.0
+          },
+          "SUSPICIOUS": {
+            "count": 0,
+            "ratio": 0.0
+          }
+        },
+        "unavailable": {
+          "count": 0,
+          "ratio": 0.0
+        }
+      },
+      "longer_41_plus": {
+        "inferred_sample_count": 600,
+        "available_count": 600,
+        "text_score": {
+          "mean": 95.74,
+          "median": 96.0,
+          "min": 92.0,
+          "max": 96.0
+        },
+        "suspicious_probability": {
+          "mean": 0.002210318826837465,
+          "median": 0.00218194758053869
+        },
+        "text_score_gte_90": {
+          "count": 600,
+          "ratio": 1.0
+        },
+        "text_score_gte_95": {
+          "count": 599,
+          "ratio": 0.9983333333333333
+        },
+        "predicted_label": {
+          "NORMAL": {
+            "count": 600,
+            "ratio": 1.0
+          },
+          "SUSPICIOUS": {
+            "count": 0,
+            "ratio": 0.0
+          }
+        },
+        "unavailable": {
+          "count": 0,
+          "ratio": 0.0
+        }
+      }
+    },
+    "limitations": [
+      "Sampled inference, not inference over all raw rows.",
+      "The new real-world sample is unlabeled; this is not a ground-truth performance evaluation, and no Accuracy, Recall, or FPR is estimated.",
+      "NORMAL output concentration does not establish model generalization failure or prove that suspicious reviews cannot be detected.",
+      "Short reviews are not assumed to be fake or suspicious.",
+      "Writing style may differ by platform.",
+      "Unique-content sampling differs from actual traffic weighting.",
+      "Weak suspicious evidence is not equivalent to sufficient trustworthy evidence.",
+      "A separate positive-control inference has not yet been run."
+    ]
+  }
+}
